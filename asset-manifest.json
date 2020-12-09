@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2779d99c.chunk.css",
+    "main.js": "/static/js/main.fe65d2b9.chunk.js",
+    "main.js.map": "/static/js/main.fe65d2b9.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.42483bc1.js",
+    "runtime-main.js.map": "/static/js/runtime-main.42483bc1.js.map",
+    "static/js/2.ae36cc4c.chunk.js": "/static/js/2.ae36cc4c.chunk.js",
+    "static/js/2.ae36cc4c.chunk.js.map": "/static/js/2.ae36cc4c.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.0741e9e29c51e2850a02c65ea41376ce.js": "/precache-manifest.0741e9e29c51e2850a02c65ea41376ce.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.2779d99c.chunk.css.map": "/static/css/main.2779d99c.chunk.css.map",
+    "static/js/2.ae36cc4c.chunk.js.LICENSE.txt": "/static/js/2.ae36cc4c.chunk.js.LICENSE.txt",
+    "static/media/MS_EXAM.png": "/static/media/MS_EXAM.77c49338.png",
+    "static/media/App.css": "/static/media/Roboto-Thin.321de678.ttf",
+    "static/media/head.mp4": "/static/media/head.7b24a499.mp4"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.42483bc1.js",
+    "static/js/2.ae36cc4c.chunk.js",
+    "static/css/main.2779d99c.chunk.css",
+    "static/js/main.fe65d2b9.chunk.js"
+  ]
+}
