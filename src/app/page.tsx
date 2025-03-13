@@ -13,8 +13,8 @@ interface Style {
 }
 
 export default function Home() {
-  const rows = 8;
-  const cols = 12;
+  const rows = 5;
+  const cols = 8;
   ;
   const numPieces = rows * cols;
   const videoWidth = 800;
@@ -32,8 +32,8 @@ export default function Home() {
 
   useEffect(() => {
     const randomStyles = Array.from({ length: numPieces }).map(() => ({
-      width: videoWidth / cols + Math.random() * 10,
-      height: videoHeight / rows + Math.random() * 10,
+      width: videoWidth / cols + Math.random() * 12,
+      height: videoHeight / rows + Math.random() * 13,
       margin: 5 + Math.random() * 3,
       padding: 1 + Math.random() * 1.5,
       left: -99 - Math.random() * 10,
@@ -94,7 +94,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isVideoLoaded) {
-      setTimeout(() => { setIsTextVisible(true); setArrowVisible(true); }, 3000);
+      setTimeout(() => { setIsTextVisible(true); setArrowVisible(true); }, 5000);
     }
   }, [isVideoLoaded]);
 
@@ -158,7 +158,7 @@ export default function Home() {
           className="absolute text-center text-white text-4xl font-bold uppercase tracking-widest opacity-0 transition-opacity duration-5000 ease-in-out"
           style={{ opacity: isTextVisible ? 1 : 0 }}
         >
-          <h1 className="glitch">MARCO HUWIG - WEB DEVELOPMENT</h1>
+          <h1 className="glitch font-bold text-5xl">MARCO HUWIG - WEB DEVELOPMENT</h1>
         </div>
       )}
 
