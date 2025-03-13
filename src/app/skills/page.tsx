@@ -10,14 +10,15 @@ const skills = [
 ];
 
 interface Dot {
-  top: string
+  top: string;
   left: string;
   size: string;
   opacity: number;
   delay: string;
   speed: number;
+  spinSpeed: number;
+  spinDirection: number; // +1 for clockwise, -1 for counterclockwise
 }
-
 
 export default function Skills() {
   const [hoveredCategory, setHoveredCategory] = useState<number>(-1);
@@ -25,29 +26,24 @@ export default function Skills() {
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    // Generate random dots with more spread-out positions and different scroll speeds
     const generatedDots = Array.from({ length: 20 }).map(() => ({
       top: `${Math.random() * 100}vh`,
       left: `${Math.random() * 100}vw`,
-      size: `${Math.random() * 100 + 100}px`, // Random size between 100px and 200px
-      opacity: Math.random() * 0.5 + 0.3, // Random opacity between 0.3 and 0.8
-      delay: `${Math.random() * 2}s`, // Random fade-in delay
-      speed: Math.random() * 0.12, // Random scroll speed between 0.5 and 2 (higher values = slower)
+      size: `${Math.random() * 100 + 100}px`,
+      opacity: Math.random() * 0.5 + 0.3,
+      delay: `${Math.random() * 2}s`,
+      speed: Math.random() * 0.12,
+      spinSpeed: Math.random() * 5 + 8,
+      spinDirection: Math.random() > 0.5 ? 1 : -1,
     }));
     setDots(generatedDots);
 
-    // Update scroll position on scroll event
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
     };
 
-    // Listen for scroll events
     window.addEventListener('scroll', handleScroll);
-
-    // Clean up the scroll event listener on unmount
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
@@ -80,49 +76,33 @@ export default function Skills() {
         </div>
       </div>
 
-      {/* Pulsating, Parallax effect on dots based on scroll */}
+      {/* Pulsating, Spinning, Scrolling Dots */}
       {dots.map((dot, index) => (
         <div
           key={index}
-          className="fixed inset-0 bg-pink-400 opacity-30 rounded-full animate-pulse z-0"
+          className="fixed inset-0 bg-pink-400 opacity-30 rounded-full z-0"
           style={{
             top: dot.top,
             left: dot.left,
             width: dot.size,
             height: dot.size,
             opacity: dot.opacity,
+            animation: `rotateY ${dot.spinSpeed}s linear infinite`,
+            animationDirection: dot.spinDirection === 1 ? 'normal' : 'reverse',
             animationDelay: dot.delay,
-            transition: 'opacity 3s ease-in-out',
-            transform: `translateY(${scrollPosition * dot.speed}px)`, // Apply different speed for each dot
+            transform: `translateY(${scrollPosition * dot.speed}px)`,
           }}
         ></div>
       ))}
 
-      {/* Additional background pulsating circles */}
-      <div className="fixed inset-0 bg-pink-400 opacity-30 rounded-full animate-pulse z-0" style={{ width: '300px', height: '300px', top: '20%', left: '10%' }}></div>
-      <div className="fixed top-1/3 left-1/4 bg-pink-400 opacity-15 rounded-full animate-pulse z-0" style={{ width: '200px', height: '200px' }}></div>
-      <div className="fixed top-1/2 left-1/2 bg-pink-400 opacity-10 rounded-full animate-pulse z-0" style={{ width: '250px', height: '250px' }}></div>
-
-      {/* Additional medium-sized pulsating circles */}
-      <div className="fixed top-1/4 left-1/3 bg-pink-300 opacity-15 rounded-full animate-pulse z-0" style={{ width: '200px', height: '200px' }}></div>
-      <div className="fixed top-1/2 left-1/3 bg-pink-300 opacity-10 rounded-full animate-pulse z-0" style={{ width: '150px', height: '150px' }}></div>
-      <div className="fixed top-2/3 left-1/4 bg-pink-300 opacity-5 rounded-full animate-pulse z-0" style={{ width: '180px', height: '180px' }}></div>
-
-      {/* Smooth scrolling */}
+      {/* Styles for Animations */}
       <style jsx>{`
         html {
           scroll-behavior: smooth;
         }
-        .fade-in {
-          animation: fadeIn 10s forwards;
-        }
-        @keyframes fadeIn {
-          0% {
-            opacity: 0;
-          }
-          100% {
-            opacity: 0.3;
-          }
+        @keyframes rotateY {
+          0% { transform: rotateY(0deg); }
+          100% { transform: rotateY(360deg); }
         }
       `}</style>
     </div>
