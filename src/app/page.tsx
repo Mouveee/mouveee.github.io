@@ -19,20 +19,14 @@ export default function Home() {
   const videoWidth = 800;
   const videoHeight = 450;
 
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState<boolean>(false);
   const [styles, setStyles] = useState<Style[]>([]);
   const [opacities, setOpacities] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
   const [arrowVisible, setArrowVisible] = useState<boolean>(false);
-  const [fadeOut, setFadeOut] = useState<boolean>(false); // State to trigger fade-out
-  const [windowWidth, setWindowWidth] = useState(0);
-
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-  }, []);
-
-
+  const [fadeOut, setFadeOut] = useState<boolean>(false);
+  
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
 
@@ -139,7 +133,9 @@ export default function Home() {
           Array.from({ length: numPieces }).map((_, index) => (
             <canvas
               key={index}
-              ref={(el) => (canvasRefs.current[index] = el)}
+              ref={(el) => {
+                canvasRefs.current[index] = el;
+              }}
               width={styles[index].width}
               height={styles[index].height}
               className="absolute"

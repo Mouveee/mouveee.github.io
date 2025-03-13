@@ -9,11 +9,20 @@ const skills = [
   { category: "Tools & Platforms", items: ["Git, Docker", "Jira, Confluence", "Azure", "Firebase Messaging"] },
 ];
 
+interface Dot {
+  top: string
+  left: string;
+  size: string;
+  opacity: number;
+  delay: string;
+  speed: number;
+}
+
+
 export default function Skills() {
   const [hoveredCategory, setHoveredCategory] = useState<number>(-1);
-  const [dots, setDots] = useState<any[]>([]);
+  const [dots, setDots] = useState<Dot[]>([]);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
     // Generate random dots with more spread-out positions and different scroll speeds
@@ -39,12 +48,6 @@ export default function Skills() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
-
-  useEffect(() => {
-    // Set fade-in after a delay when the component mounts
-    const timer = setTimeout(() => setFadeIn(true), 500); // 500ms delay before fade-in
-    return () => clearTimeout(timer);
   }, []);
 
   return (
