@@ -13,9 +13,8 @@ interface Style {
 }
 
 export default function Home() {
-  const rows = 5;
-  const cols = 8;
-  ;
+  const rows = 4;
+  const cols = 7;
   const numPieces = rows * cols;
   const videoWidth = 800;
   const videoHeight = 450;
@@ -26,13 +25,20 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
   const [arrowVisible, setArrowVisible] = useState<boolean>(false);
+  const [fadeOut, setFadeOut] = useState<boolean>(false); // State to trigger fade-out
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+  }, []);
+
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
 
   useEffect(() => {
     const randomStyles = Array.from({ length: numPieces }).map(() => ({
-      width: videoWidth / cols + Math.random() * 12,
+      width: videoWidth / cols + Math.random() * 15,
       height: videoHeight / rows + Math.random() * 13,
       margin: 5 + Math.random() * 3,
       padding: 1 + Math.random() * 1.5,
@@ -46,7 +52,10 @@ export default function Home() {
     setStyles(randomStyles);
     setOpacities(randomOpacities);
 
-    if (!isVideoLoaded) return;
+    if (!isVideoLoaded) {
+      console.log('Video not loaded');
+      return;
+    }
 
     function draw() {
       const video = videoRef.current;
@@ -85,9 +94,10 @@ export default function Home() {
         video.removeEventListener('play', handleVideoPlay);
       }
     };
-  }, [isVideoLoaded]);
+  }, [isVideoLoaded, numPieces]);
 
   const handleVideoLoad = () => {
+    console.log('Video loaded');
     setIsVideoLoaded(true);
     setIsLoading(false);
   };
@@ -98,8 +108,13 @@ export default function Home() {
     }
   }, [isVideoLoaded]);
 
+  const handleLinkClick = () => {
+    // Trigger fade-out when the link is clicked
+    setFadeOut(true);
+  };
+
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden">
+    <div className={`relative min-h-screen flex items-center justify-center bg-black overflow-hidden ${fadeOut ? "opacity-0 transition-opacity duration-1000" : ""}`}>
       <div
         className="relative"
         style={{
@@ -138,6 +153,8 @@ export default function Home() {
                 opacity: isVideoLoaded ? opacities[index] : 0,
                 transition: "opacity 3s",
                 transform: "rotate(360deg)",
+                filter: "pixelate(1px)",
+                borderRadius: "25px",
               }}
             ></canvas>
           ))}
@@ -146,6 +163,7 @@ export default function Home() {
       {/* Animated Arrow Link */}
       <Link
         href="/skills"
+        onClick={handleLinkClick} // Trigger fade-out when clicked
         className={`border-r-pink-500 absolute bottom-6 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"
           }`}
       >
@@ -165,14 +183,14 @@ export default function Home() {
       {/* Hidden Video (Used as a Source for Canvas) */}
       <video
         id="sourceVideo"
-        className="absolute opacity-0"
+        className="absolute opacity-0 grayscale"
         ref={videoRef}
         src="/myself.mp4"
         autoPlay
         loop
         muted
         playsInline
-        onCanPlayThrough={handleVideoLoad}
+        onLoadedData={handleVideoLoad}
       />
     </div>
   );

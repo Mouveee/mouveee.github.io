@@ -20,66 +20,20 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Flashing Background */
-@keyframes animate-bg-flash {
-  0% { background-color: #000; }
-  50% { background-color: #ff00ff; }
-  100% { background-color: #000; }
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 1.2s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 }
 
-/* Shaking Effect */
-@keyframes animate-shake {
-  0% { transform: rotate(0); }
-  50% { transform: rotate(5deg); }
-  100% { transform: rotate(-5deg); }
-}
-
-/* Vibration Effect */
-@keyframes animate-vibration {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(5px); }
-  100% { transform: translateX(-5px); }
-}
-
-/* Glitch Effect */
-@keyframes glitch-effect {
-  0% { transform: scale(1) rotate(0); opacity: 1; }
-  50% { transform: scale(1.1) rotate(10deg); opacity: 0.5; }
-  100% { transform: scale(0.9) rotate(-10deg); opacity: 1; }
-}
-
-/* Floating Effect */
-@keyframes floatSkull {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(10px); }
-}
-
-/* Particle Explosion Effect */
-@keyframes floatGlitch {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-50px); }
-  100% { transform: translateY(50px); }
-}
-
-/* Twitch Effect */
-@keyframes animate-twitch {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(3px); }
-  100% { transform: translateX(0); }
-}
-
-@keyframes animate-jitter {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(5px); }
-  100% { transform: translateX(0); }
-}
-
-/* Particle Shift (Death effect) */
-@keyframes animate-shift {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(10px); }
-}
 
 
