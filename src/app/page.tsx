@@ -1,101 +1,179 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import arrowDown from '../assets/arrow_down.jpg';
+
+interface Style {
+  width: number;
+  height: number;
+  margin: number;
+  padding: number;
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const rows = 8;
+  const cols = 12;
+  ;
+  const numPieces = rows * cols;
+  const videoWidth = 800;
+  const videoHeight = 450;
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [styles, setStyles] = useState<Style[]>([]);
+  const [opacities, setOpacities] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
+  const [arrowVisible, setArrowVisible] = useState<boolean>(false);
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
+
+  useEffect(() => {
+    const randomStyles = Array.from({ length: numPieces }).map(() => ({
+      width: videoWidth / cols + Math.random() * 10,
+      height: videoHeight / rows + Math.random() * 10,
+      margin: 5 + Math.random() * 3,
+      padding: 1 + Math.random() * 1.5,
+      left: -99 - Math.random() * 10,
+    }));
+
+    const randomOpacities = Array.from({ length: numPieces }).map(
+      () => 0.3 + Math.random() * 0.9
+    );
+
+    setStyles(randomStyles);
+    setOpacities(randomOpacities);
+
+    if (!isVideoLoaded) return;
+
+    function draw() {
+      const video = videoRef.current;
+      if (video && !video.paused && !video.ended) {
+        canvasRefs.current.forEach((canvas, index) => {
+          if (!canvas) return;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return;
+
+          const row = Math.floor(index / cols);
+          const col = index % cols;
+          const style = styles[index];
+
+          ctx.clearRect(0, 0, style.width, style.height);
+          ctx.drawImage(
+            video,
+            col * (videoWidth / cols), row * (videoHeight / rows), videoWidth / cols, videoHeight / rows, // Source area
+            0, 0, style.width, style.height // Destination area
+          );
+        });
+        requestAnimationFrame(draw);
+      }
+    }
+
+    const handleVideoPlay = () => {
+      draw();
+    };
+
+    const video = videoRef.current;
+    if (video) {
+      video.addEventListener('play', handleVideoPlay);
+    }
+
+    return () => {
+      if (video) {
+        video.removeEventListener('play', handleVideoPlay);
+      }
+    };
+  }, [isVideoLoaded]);
+
+  const handleVideoLoad = () => {
+    setIsVideoLoaded(true);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (isVideoLoaded) {
+      setTimeout(() => { setIsTextVisible(true); setArrowVisible(true); }, 3000);
+    }
+  }, [isVideoLoaded]);
+
+  return (
+    <div className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden">
+      <div
+        className="relative"
+        style={{
+          width: `${videoWidth}px`,
+          height: `${videoHeight}px`,
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        {/* Loading Spinner */}
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="border-t-4 border-b-4 border-white w-12 h-12 rounded-full animate-spin"></div>
+          </div>
+        )}
+
+        {/* Render Canvas Grid */}
+        {styles.length > 0 &&
+          opacities.length > 0 &&
+          Array.from({ length: numPieces }).map((_, index) => (
+            <canvas
+              key={index}
+              ref={(el) => (canvasRefs.current[index] = el)}
+              width={styles[index].width}
+              height={styles[index].height}
+              className="absolute"
+              style={{
+                width: `${styles[index].width}px`,
+                height: `${styles[index].height}px`,
+                left: `${(index % cols) * (videoWidth / cols) - Math.random() * 12}px`, // Removed random shift
+                top: `${Math.floor(index / cols) * (videoHeight / rows)}px`,
+                margin: `${styles[index].margin}px`,
+                padding: `${styles[index].padding}px`,
+                opacity: isVideoLoaded ? opacities[index] : 0,
+                transition: "opacity 3s",
+                transform: "rotate(360deg)",
+              }}
+            ></canvas>
+          ))}
+      </div>
+
+      {/* Animated Arrow Link */}
+      <Link
+        href="/skills"
+        className={`border-r-pink-500 absolute bottom-6 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"
+          }`}
+      >
+        <Image src={arrowDown} alt="Arrow down" className="w-6 h-6 animate-bounce" />
+      </Link>
+
+      {/* Text Overlay */}
+      {isTextVisible && (
+        <div
+          className="absolute text-center text-white text-4xl font-bold uppercase tracking-widest opacity-0 transition-opacity duration-5000 ease-in-out"
+          style={{ opacity: isTextVisible ? 1 : 0 }}
+        >
+          <h1 className="glitch">MARCO HUWIG - WEB DEVELOPMENT</h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
+
+      {/* Hidden Video (Used as a Source for Canvas) */}
+      <video
+        id="sourceVideo"
+        className="absolute opacity-0"
+        ref={videoRef}
+        src="/myself.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        onCanPlayThrough={handleVideoLoad}
+      />
     </div>
   );
 }
