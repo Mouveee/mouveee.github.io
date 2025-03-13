@@ -35,5 +35,15 @@ body {
   }
 }
 
+@keyframes flicker {
+  0% { opacity: 0.9; }
+  50% { opacity: 1; }
+  100% { opacity: 0.85; }
+}
+.flicker {
+  animation: flicker 0.15s infinite alternate delay(5s);
+}
+
+
 
 

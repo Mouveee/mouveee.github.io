@@ -7,6 +7,7 @@ const skills = [
   { category: "Backend", items: ["Node.js (Express)", "PHP (Drupal 7 & Drupal 10)"] },
   { category: "Databases & Servers", items: ["MySQL, MongoDB", "Nginx, Apache", "Linux Shell"] },
   { category: "Tools & Platforms", items: ["Git, Docker", "Jira, Confluence", "Azure", "Firebase Messaging"] },
+  { category: "Qualifications", items: ["Computer Science Expert (IHK Saar)", "MS-Exam 70-480 Programming with JS, HTML and CSS"] },
 ];
 
 interface Dot {
@@ -48,9 +49,9 @@ export default function Skills() {
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center p-6 relative overflow-hidden">
-      <div className="max-w-3xl w-full bg-black p-8 rounded-lg shadow-lg border border-gray-800 z-10">
+      <div className="max-w-3xl w-full bg-black p-8 rounded-lg shadow-lg border border-gray-800 z-10 opacity-90">
         <h1 className="text-5xl font-semibold mb-8 text-center text-white uppercase">Technology Stack</h1>
-        <div className="divide-y divide-gray-700">
+        <div className="divide-y divide-gray-900">
           {skills.map((skill, index) => (
             <div
               key={index}

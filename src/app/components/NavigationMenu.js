@@ -1,0 +1,54 @@
+"use client";
+
+import { useState } from "react";
+
+const NavigationMenu = () => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div className="relative">
+      <div
+        className="fixed h-2 w-2 justify-center bottom-10 text-center left-10 p-4 rounded-full bg-pink-500 shadow-lg cursor-pointer transition-transform transform hover:scale-125 hover:shadow-2xl animate-bounce"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div className="fixed bottom-4 left-4 text-white text-2xl">!</div>
+      </div>
+
+      {/* Menu Container */}
+      <nav
+        className={`fixed bottom-10 left-10 p-4 bg-black text-white rounded-lg shadow-lg transition-transform transform duration-300 ease-in-out ${
+          isHovered ? "scale-100 opacity-100" : "scale-0 opacity-0"
+        }`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <ul className="flex flex-row space-x-4">
+          <li
+            className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
+              window.location.pathname === "/intro" && "opacity-0"
+            }`}
+          >
+            <a href="/intro">Intro</a>
+          </li>
+          <li
+            className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
+              window.location.pathname === "/skills" && "opacity-0"
+            }`}
+          >
+            <a href="/skills">Skills</a>
+          </li>
+          <li
+            className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
+              window.location.pathname === "/about" && "opacity-0"
+            }`}
+          >
+            <a href="/about">About</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  );
+};
+
+export default NavigationMenu;

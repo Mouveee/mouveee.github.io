@@ -40,7 +40,7 @@ export default function Home() {
     }));
 
     const randomOpacities = Array.from({ length: numPieces }).map(
-      () => 0.3 + Math.random() * 0.9
+      () => 0.3 + Math.random() * 0.7
     );
 
     setStyles(randomStyles);
@@ -138,7 +138,7 @@ export default function Home() {
               }}
               width={styles[index].width}
               height={styles[index].height}
-              className="absolute"
+              className="absolute flicker"
               style={{
                 width: `${styles[index].width}px`,
                 height: `${styles[index].height}px`,
@@ -158,12 +158,12 @@ export default function Home() {
 
       {/* Animated Arrow Link */}
       <Link
-        href="/skills"
+        href="/intro"
         onClick={handleLinkClick} // Trigger fade-out when clicked
-        className={`border-r-pink-500 absolute bottom-6 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"
+        className={` absolute bottom-6 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"
           }`}
       >
-        <Image src={arrowDown} alt="Arrow down" className="w-6 h-6 animate-bounce" />
+        <Image src={arrowDown} alt="Arrow down" className="w-6 h-6 animate-bounce border-r-pink-500" />
       </Link>
 
       {/* Text Overlay */}

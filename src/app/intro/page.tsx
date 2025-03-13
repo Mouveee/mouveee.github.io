@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from "react";
+import NavigationMenu from "@/app/components/NavigationMenu";
 
 const IntroSection = () => {
   useEffect(() => {
@@ -21,8 +22,8 @@ const IntroSection = () => {
   }, []);
 
   return (
-    <section className="bg-black text-white py-16 px-6 md:px-12">
-      <div className="max-w-4xl mx-auto">
+    <section className="bg-black text-white py-16 px-6 md:px-12 h-screen">
+      <div className="max-w-4xl mx-auto m-auto">
         <h1 className="text-3xl font-semibold mb-4 text-pink-500 fade-in">
           Marco Huwig – Webentwickler mit Fokus auf Frontend
         </h1>
@@ -42,6 +43,7 @@ const IntroSection = () => {
           Lass uns gemeinsam digitale Erlebnisse schaffen, die überzeugen!
         </p>
       </div>
+      <NavigationMenu />
     </section>
   );
 };
