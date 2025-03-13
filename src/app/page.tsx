@@ -40,7 +40,7 @@ export default function Home() {
     const randomStyles = Array.from({ length: numPieces }).map(() => ({
       width: videoWidth / cols + Math.random() * 15,
       height: videoHeight / rows + Math.random() * 13,
-      margin: 5 + Math.random() * 3,
+      margin: 5 + Math.random() * 3.5,
       padding: 1 + Math.random() * 1.5,
       left: -99 - Math.random() * 10,
     }));
@@ -114,7 +114,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`relative min-h-screen flex items-center justify-center bg-black overflow-hidden ${fadeOut ? "opacity-0 transition-opacity duration-1000" : ""}`}>
+    <div className={`relative min-h-screen flex items-center justify-center bg-black overflow-hidden ${fadeOut ? "opacity-0 transition-opacity duration-[3000s]" : ""}`}>
       <div
         className="relative"
         style={{
@@ -154,7 +154,7 @@ export default function Home() {
                 transition: "opacity 3s",
                 transform: "rotate(360deg)",
                 filter: "pixelate(1px)",
-                borderRadius: "25px",
+                borderRadius: "25%",
               }}
             ></canvas>
           ))}

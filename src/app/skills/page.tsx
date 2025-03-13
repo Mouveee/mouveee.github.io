@@ -23,7 +23,7 @@ export default function Skills() {
       size: `${Math.random() * 100 + 100}px`, // Random size between 100px and 200px
       opacity: Math.random() * 0.5 + 0.3, // Random opacity between 0.3 and 0.8
       delay: `${Math.random() * 2}s`, // Random fade-in delay
-      speed: Math.random() * 0.02, // Random scroll speed between 0.5 and 2 (higher values = slower)
+      speed: Math.random() * 0.12, // Random scroll speed between 0.5 and 2 (higher values = slower)
     }));
     setDots(generatedDots);
 
