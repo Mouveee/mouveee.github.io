@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import NavigationMenu from '@/app/components/NavigationMenu';
 
 const skills = [
   { category: "Frontend", items: ["JavaScript (TypeScript)", "HTML, CSS (Sass, Tailwind)", "React, Next.js, Vue"] },
@@ -95,6 +96,8 @@ export default function Skills() {
           }}
         ></div>
       ))}
+
+      <NavigationMenu />
 
       {/* Styles for Animations */}
       <style jsx>{`
