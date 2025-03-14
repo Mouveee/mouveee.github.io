@@ -1,6 +1,7 @@
 'use client';
 
 import React from "react";
+import NavigationMenu from "@/app/components/NavigationMenu";
 
 interface ASCIIAnimation {
     [key: string]: string[];
@@ -37,14 +38,15 @@ export default function About() {
             "   /   \\    ",
             "  /     \\   "
         ],
-        darkSouls: [
-            "      ____      ",
-            "     /    \\     ",
-            "    /      \\    ",
-            "   |  O  O  |   ",
-            "   |    ||   |   ",
-            "    \\______/    "
-        ],
+        zelda: [
+            "        /\\        ",
+            "       /  \\       ",
+            "      /____\\      ",
+            "     /\\    /\\     ",
+            "    /  \\  /  \\    ",
+            "   /____\\/____\\   "
+        ]
+        ,
         junjiIto: [
             "   .-.      ",
             "  (O O)     ",
@@ -90,8 +92,8 @@ export default function About() {
             "  .-(    ).    ",
             " (        )   ",
             "  `-.____.-'   ",
-            "     ||||      ",
-            "     ||||      "
+            "    / // /      ",
+            "     // / /      "
         ],
         movieNerd: [
             "   ________   ",
@@ -124,7 +126,7 @@ export default function About() {
         murakami: "Haruki Murakami is a master of magical realism, blending surreal elements with everyday life.",
         gatsby: "The Great Gatsby explores themes of wealth, love, and the American Dream in the Jazz Age.",
         twinPeaks: "Twin Peaks is a mind-bending TV show, mixing crime drama with surrealist elements.",
-        darkSouls: "Dark Souls is a notoriously difficult action RPG known for its deep lore and atmospheric world.",
+        zelda: "The Legend of Zelda is a beloved action-adventure series renowned for its immersive world, intricate puzzles, and epic quests. Its blend of exploration, combat, and rich storytelling has made it a cornerstone of gaming history.",
         junjiIto: "Junji Ito's horror stories often involve grotesque body horror and twisted psychological elements.",
         jpegmafia: "JPEGMAFIA is an experimental rapper and producer known for his eclectic style and biting social commentary.",
         radiohead: "Radiohead is a British rock band that revolutionized modern music with their experimental approach.",
@@ -196,8 +198,8 @@ export default function About() {
                     label: "Ableton Live"
                 },
                 {
-                    key: "darkSouls",
-                    label: "Dark Souls"
+                    key: "zelda",
+                    label: "Zelda Series"
                 },
                 {
                     key: "junjiIto",
@@ -218,10 +220,10 @@ export default function About() {
                 About Me
             </h1>
 
-            <div className="mt-12 space-y-8 w-full max-w-4xl z-10">
+            <div className="mt-12 space-y-8 w-full max-w-4xl z-10 text-center">
                 {categories.map((category, catIndex) => (
                     <div key={catIndex}>
-                        <h2 className="text-xl font-semibold text-pink-500 mb-4 uppercase">{category.title}</h2>
+                        <h2 className="text-2xl self-center font-semibold mb-4 uppercase">{category.title}</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                             {category.interests.map((item, index) => (
                                 <div key={index} className="perspective-1000">
@@ -277,6 +279,7 @@ export default function About() {
                     transform: rotateY(180deg);
                 }
             `}</style>
+            <NavigationMenu />
         </div>
     );
 }
