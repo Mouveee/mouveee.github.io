@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 const NavigationMenu = () => {
   const [isHovered, setIsHovered] = useState(false);
