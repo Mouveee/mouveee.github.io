@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useState } from "react";
 
 const NavigationMenu = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
 
   return (
     <div className="relative">
@@ -26,21 +33,21 @@ const NavigationMenu = () => {
         <ul className="flex flex-row space-x-4">
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              window.location.pathname === "/intro" && "opacity-0"
+              currentPath === "/intro" ? "opacity-0" : ""
             }`}
           >
             <a href="/intro">Intro</a>
           </li>
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              window.location.pathname === "/skills" && "opacity-0"
+              currentPath === "/skills" ? "opacity-0" : ""
             }`}
           >
             <a href="/skills">Skills</a>
           </li>
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              window.location.pathname === "/about" && "opacity-0"
+              currentPath === "/about" ? "opacity-0" : ""
             }`}
           >
             <a href="/about">About</a>
