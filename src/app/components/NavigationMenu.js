@@ -15,16 +15,16 @@ const NavigationMenu = () => {
   return (
     <div className="relative">
       <div
-        className="fixed h-2 w-2 justify-center bottom-10 text-center left-10 p-4 rounded-full bg-pink-500 shadow-lg cursor-pointer transition-transform transform hover:scale-125 hover:shadow-2xl animate-bounce"
+        className="fixed h-10 w-10 flex items-center justify-center bottom-10 right-10 p-4 rounded-full bg-pink-500 shadow-lg cursor-pointer transition-transform transform hover:scale-125 hover:shadow-2xl animate-bounce z-49"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="fixed bottom-4 left-4 text-white text-2xl">!</div>
+        <div className="text-white text-2xl font-bold">!</div>
       </div>
 
       {/* Menu Container */}
       <nav
-        className={`fixed bottom-10 left-10 p-4 bg-black text-white rounded-lg shadow-lg transition-transform transform duration-300 ease-in-out ${
+        className={`fixed bottom-10 right-10 p-4 bg-black text-white rounded-lg shadow-lg transition-transform transform duration-300 ease-in-out z-50 ${
           isHovered ? "scale-100 opacity-100" : "scale-0 opacity-0"
         }`}
         onMouseEnter={() => setIsHovered(true)}
@@ -33,21 +33,21 @@ const NavigationMenu = () => {
         <ul className="flex flex-row space-x-4">
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              currentPath === "/intro" ? "opacity-0" : ""
+              currentPath === "/intro" ? "hidden" : ""
             }`}
           >
             <a href="/intro">Intro</a>
           </li>
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              currentPath === "/skills" ? "opacity-0" : ""
+              currentPath === "/skills" ? "hidden" : ""
             }`}
           >
             <a href="/skills">Skills</a>
           </li>
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              currentPath === "/about" ? "opacity-0" : ""
+              currentPath === "/about" ? "hidden" : ""
             }`}
           >
             <a href="/about">About</a>
