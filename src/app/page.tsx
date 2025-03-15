@@ -140,12 +140,12 @@ export default function Home() {
               height={styles[index].height}
               className="absolute flicker"
               style={{
-                width: `${styles[index].width}px`,
-                height: `${styles[index].height}px`,
+                width: `${styles[index].width}px` + Math.random() * 10,
+                height: `${styles[index].height}px` + Math.random() * 10,
                 left: `${(index % cols) * (videoWidth / cols) - Math.random() * 12}px`, // Removed random shift
                 top: `${Math.floor(index / cols) * (videoHeight / rows)}px`,
-                margin: `${styles[index].margin}px`,
-                padding: `${styles[index].padding}px`,
+                margin: `${styles[index].margin}px` + Math.random() * 15,
+                padding: `${styles[index].padding}px` + Math.random() * 15,
                 opacity: isVideoLoaded ? opacities[index] : 0,
                 transition: "opacity 3s",
                 transform: "rotate(360deg)",
