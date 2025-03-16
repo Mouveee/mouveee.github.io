@@ -5,75 +5,124 @@ import Link from 'next/link';
 import Image from 'next/image';
 import arrowDown from '../assets/arrow_down.jpg';
 
-interface Style {
+// Constants for video grid
+const ROWS = 4;
+const COLS = 7;
+const NUM_PIECES = ROWS * COLS;
+const VIDEO_WIDTH = 800;
+const VIDEO_HEIGHT = 450;
+
+// Types
+interface CanvasStyle {
   width: number;
   height: number;
   margin: number;
   padding: number;
+  opacity: number;
+  left: number;
+  top: number;
+  randomOffset: {
+    width: number;
+    height: number;
+    margin: number;
+    padding: number;
+    x: number;
+  };
+  animation: {
+    duration: number;
+    delay: number;
+  };
 }
 
 export default function Home() {
-  const rows = 4;
-  const cols = 7;
-  const numPieces = rows * cols;
-  const videoWidth = 800;
-  const videoHeight = 450;
-
+  // State management
   const [isVideoLoaded, setIsVideoLoaded] = useState<boolean>(false);
-  const [styles, setStyles] = useState<Style[]>([]);
-  const [opacities, setOpacities] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
   const [arrowVisible, setArrowVisible] = useState<boolean>(false);
   const [fadeOut, setFadeOut] = useState<boolean>(false);
-  
+  const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
+
+  // Refs
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
 
+  // Initialize canvas styles on mount
   useEffect(() => {
-    const randomStyles = Array.from({ length: numPieces }).map(() => ({
-      width: videoWidth / cols + Math.random() * 15,
-      height: videoHeight / rows + Math.random() * 13,
-      margin: 5 + Math.random() * 3.5,
-      padding: 1 + Math.random() * 1.5,
-      left: -99 - Math.random() * 10,
-    }));
+    const styles = Array.from({ length: NUM_PIECES }).map((_, index) => {
+      const row = Math.floor(index / COLS);
+      const col = index % COLS;
+      const baseWidth = VIDEO_WIDTH / COLS;
+      const baseHeight = VIDEO_HEIGHT / ROWS;
+      
+      return {
+        width: baseWidth,
+        height: baseHeight,
+        margin: 5,
+        padding: 1,
+        opacity: 0.2 + Math.random() * 0.9,
+        left: col * baseWidth,
+        top: row * baseHeight,
+        randomOffset: {
+          width: Math.random() * 15,
+          height: Math.random() * 15,
+          margin: Math.random() * 15,
+          padding: Math.random() * 15,
+          x: Math.random() * 12,
+        },
+        animation: {
+          duration: 1 + Math.random() * 2,
+          delay: Math.random() * 2,
+        }
+      };
+    });
+    
+    setCanvasStyles(styles);
+  }, []);
 
-    const randomOpacities = Array.from({ length: numPieces }).map(
-      () => 0.3 + Math.random() * 0.7
-    );
-
-    setStyles(randomStyles);
-    setOpacities(randomOpacities);
-
+  // Video loading and canvas drawing effect
+  useEffect(() => {
     if (!isVideoLoaded) {
       console.log('Video not loaded');
       return;
     }
+    
+    // Show text and arrow after video loads
+    setTimeout(() => { 
+      setIsTextVisible(true); 
+      setArrowVisible(true); 
+    }, 200);
 
+    // Canvas drawing function
     function draw() {
       const video = videoRef.current;
-      if (video && !video.paused && !video.ended) {
-        canvasRefs.current.forEach((canvas, index) => {
-          if (!canvas) return;
-          const ctx = canvas.getContext('2d');
-          if (!ctx) return;
+      if (!video || video.paused || video.ended) return;
+      
+      canvasRefs.current.forEach((canvas, index) => {
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-          const row = Math.floor(index / cols);
-          const col = index % cols;
-          const style = styles[index];
+        const style = canvasStyles[index];
+        if (!style) return;
+        
+        const row = Math.floor(index / COLS);
+        const col = index % COLS;
+        const sourceWidth = VIDEO_WIDTH / COLS;
+        const sourceHeight = VIDEO_HEIGHT / ROWS;
 
-          ctx.clearRect(0, 0, style.width, style.height);
-          ctx.drawImage(
-            video,
-            col * (videoWidth / cols), row * (videoHeight / rows), videoWidth / cols, videoHeight / rows, // Source area
-            0, 0, style.width, style.height // Destination area
-          );
-        });
-        requestAnimationFrame(draw);
-      }
+        ctx.clearRect(0, 0, style.width + style.randomOffset.width, style.height + style.randomOffset.height);
+        ctx.drawImage(
+          video,
+          col * sourceWidth, row * sourceHeight, sourceWidth, sourceHeight, // Source area
+          0, 0, style.width + style.randomOffset.width, style.height + style.randomOffset.height // Destination area
+        );
+      });
+      
+      requestAnimationFrame(draw);
     }
 
+    // Set up video play listener
     const handleVideoPlay = () => {
       draw();
     };
@@ -83,37 +132,51 @@ export default function Home() {
       video.addEventListener('play', handleVideoPlay);
     }
 
+    // Cleanup
     return () => {
       if (video) {
         video.removeEventListener('play', handleVideoPlay);
       }
     };
-  }, [isVideoLoaded, numPieces]);
+  }, [isVideoLoaded, canvasStyles]);
 
+  // Video load handler
   const handleVideoLoad = () => {
     console.log('Video loaded');
     setIsVideoLoaded(true);
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    if (isVideoLoaded) {
-      setTimeout(() => { setIsTextVisible(true); setArrowVisible(true); }, 5000);
-    }
-  }, [isVideoLoaded]);
-
+  // Link click handler
   const handleLinkClick = () => {
-    // Trigger fade-out when the link is clicked
     setFadeOut(true);
   };
 
+  // Computed canvas style function
+  const getCanvasStyle = (style: CanvasStyle | undefined) => {
+    if (!style) return {};
+    
+    return {
+      left: `${style.left - style.randomOffset.x}px`,
+      top: `${style.top}px`,
+      margin: `${style.margin + style.randomOffset.margin}px`,
+      padding: `${style.padding + style.randomOffset.padding}px`,
+      opacity: isVideoLoaded ? style.opacity : 0,
+      transition: "opacity 3s",
+      filter: "pixelate(1px)",
+      borderRadius: "25%",
+      animation: `spin ${style.animation.duration}s linear infinite alternate`,
+      animationDelay: `${style.animation.delay}s`,
+    };
+  };
+
   return (
-    <div className={`relative min-h-screen flex items-center justify-center bg-black overflow-hidden ${fadeOut ? "opacity-0 transition-opacity duration-[3000s]" : ""}`}>
+    <div className={`relative min-h-screen flex items-center justify-center bg-black overflow-visible ${fadeOut ? "opacity-0 transition-opacity duration-[3000s]" : ""}`}>
       <div
-        className="relative"
+        className="relative overflow-visible"
         style={{
-          width: `${videoWidth}px`,
-          height: `${videoHeight}px`,
+          width: `${VIDEO_WIDTH}px`,
+          height: `${VIDEO_HEIGHT}px`,
           position: "absolute",
           top: "50%",
           left: "50%",
@@ -128,53 +191,34 @@ export default function Home() {
         )}
 
         {/* Render Canvas Grid */}
-        {styles.length > 0 &&
-          opacities.length > 0 &&
-          Array.from({ length: numPieces }).map((_, index) => (
-            <canvas
-              key={index}
-              ref={(el) => {
-                canvasRefs.current[index] = el;
-              }}
-              width={styles[index].width}
-              height={styles[index].height}
-              className="absolute flicker"
-              style={{
-                width: `${styles[index].width}px` + Math.random() * 10,
-                height: `${styles[index].height}px` + Math.random() * 10,
-                left: `${(index % cols) * (videoWidth / cols) - Math.random() * 12}px`, // Removed random shift
-                top: `${Math.floor(index / cols) * (videoHeight / rows)}px`,
-                margin: `${styles[index].margin}px` + Math.random() * 15,
-                padding: `${styles[index].padding}px` + Math.random() * 15,
-                opacity: isVideoLoaded ? opacities[index] : 0,
-                transition: "opacity 3s",
-                transform: "rotate(360deg)",
-                filter: "pixelate(1px)",
-                borderRadius: "25%",
-              }}
-            ></canvas>
-          ))}
+        {canvasStyles.map((style, index) => (
+          <canvas
+            key={index}
+            ref={(el) => { canvasRefs.current[index] = el; }}
+            width={style.width + style.randomOffset.width}
+            height={style.height + style.randomOffset.height}
+            className="absolute flicker inset-0"
+            style={getCanvasStyle(style)}
+          ></canvas>
+        ))}
       </div>
 
       {/* Animated Arrow Link */}
       <Link
         href="/intro"
-        onClick={handleLinkClick} // Trigger fade-out when clicked
-        className={` absolute bottom-6 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"
-          }`}
+        className={`absolute bottom-6 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"}`}
+        onClick={handleLinkClick}
       >
-        <Image src={arrowDown} alt="Arrow down" className="w-6 h-6 animate-bounce border-r-pink-500" />
+        <Image src={arrowDown} alt="Arrow down" className="w-auto h-auto animate-bounce border-r-pink-500" />
       </Link>
 
       {/* Text Overlay */}
-      {isTextVisible && (
-        <div
-          className="absolute text-center text-white text-4xl font-bold uppercase tracking-widest opacity-0 transition-opacity duration-5000 ease-in-out"
-          style={{ opacity: isTextVisible ? 1 : 0 }}
-        >
-          <h1 className="glitch font-bold text-5xl">MARCO HUWIG - WEB DEVELOPMENT</h1>
-        </div>
-      )}
+      <div
+        className="fixed text-center text-white text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
+        style={{ opacity: isTextVisible ? 1 : 0 }}
+      >
+        <h1 className="glitch font-bold text-5xl">MARCO HUWIG - WEB DEVELOPMENT</h1>
+      </div>
 
       {/* Hidden Video (Used as a Source for Canvas) */}
       <video
