@@ -25,7 +25,7 @@ const IntroSection = () => {
     <section className="bg-black text-white py-16 px-6 md:px-12 h-screen">
       <div className="max-w-4xl mx-auto m-auto">
         <h1 className="text-3xl font-semibold mb-4 text-pink-500 fade-in">
-          Marco Huwig – Webentwickler mit Fokus auf Frontend
+          Marco Huwig – Webentwickler
         </h1>
         <p className="text-lg mb-6 fade-in">
           Die letzten vier Jahre habe ich als Full-Stack-Entwickler bei Neocosmo
