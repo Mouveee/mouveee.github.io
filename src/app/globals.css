@@ -20,21 +20,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-@layer utilities {
-  .animate-fadeIn {
-    animation: fadeIn 1.2s ease-out forwards;
-  }
-
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-}
-
 @keyframes flicker {
   0% { opacity: 0.9; }
   50% { opacity: 1; }
@@ -42,6 +27,15 @@ body {
 }
 .flicker {
   animation: flicker 0.15s infinite alternate delay(5s);
+}
+
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(25deg);
+  }
 }
 
 
