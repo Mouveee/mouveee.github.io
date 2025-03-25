@@ -6,11 +6,9 @@ import Image from 'next/image';
 import arrowDown from '../assets/arrow_down.jpg';
 
 // Constants for video grid
-const ROWS = 4;
-const COLS = 7;
+const ROWS = 5;
+const COLS = 9;
 const NUM_PIECES = ROWS * COLS;
-const VIDEO_WIDTH = 800;
-const VIDEO_HEIGHT = 450;
 
 // Types
 interface CanvasStyle {
@@ -58,8 +56,8 @@ export default function Home() {
     const styles = Array.from({ length: NUM_PIECES }).map((_, index) => {
       const row = Math.floor(index / COLS);
       const col = index % COLS;
-      const baseWidth = VIDEO_WIDTH / COLS;
-      const baseHeight = VIDEO_HEIGHT / ROWS;
+      const baseWidth = window.innerWidth / COLS;
+      const baseHeight = window.innerHeight / ROWS;
 
       return {
         width: baseWidth,
@@ -70,10 +68,10 @@ export default function Home() {
         left: col * baseWidth,
         top: row * baseHeight,
         randomOffset: {
-          width: Math.random() * 15,
-          height: Math.random() * 15,
-          margin: Math.random() * 15,
-          padding: Math.random() * 15,
+          width: Math.random() * 12,
+          height: Math.random() * 12,
+          margin: Math.random() * 12,
+          padding: Math.random() * 12,
           x: Math.random() * 12,
         },
         animation: {
@@ -116,8 +114,8 @@ export default function Home() {
 
         const row = Math.floor(index / COLS);
         const col = index % COLS;
-        const sourceWidth = VIDEO_WIDTH / COLS;
-        const sourceHeight = VIDEO_HEIGHT / ROWS;
+        const sourceWidth = window.innerWidth / COLS;
+        const sourceHeight = window.innerHeight / ROWS;
 
         ctx.clearRect(0, 0, style.width + style.randomOffset.width, style.height + style.randomOffset.height);
         ctx.drawImage(
@@ -175,7 +173,7 @@ export default function Home() {
       sepia: "0.5",
       width: `${style.width + style.randomOffset.width}px`,
       height: `${style.height + style.randomOffset.height}px`,
-      mixBlendMode: "multiply",
+      mixBlendMode: "screen" as const,
     };
   };
 
@@ -184,8 +182,8 @@ export default function Home() {
       <div
         className="relative overflow-visible"
         style={{
-          width: `${VIDEO_WIDTH}px`,
-          height: `${VIDEO_HEIGHT}px`,
+          width: `100vw`,
+          height: `100vh`,
           position: "absolute",
           top: "50%",
           left: "50%",
@@ -211,7 +209,7 @@ export default function Home() {
             ></canvas>
 
             <div className="absolute inset-0 bg-pink-500 pointer-events-none flicker"
-              style={{...getCanvasStyle(style), opacity: Math.random() * 0.2}}
+              style={{...getCanvasStyle(style), opacity: Math.random() * 0.2, zIndex: -1}}
             >
             </div>
           </div>
@@ -231,7 +229,7 @@ export default function Home() {
 
       {/* Text Overlay */}
       <div
-        className="fixed text-center  text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
+        className="fixed text-left bottom-8 left-6  text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
         style={{ opacity: isTextVisible ? 1 : 0 }}
       >
         <h1 className="glitch font-bold text-5xl">MARCO HUWIG - WEB DEVELOPMENT</h1>
