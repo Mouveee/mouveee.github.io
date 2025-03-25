@@ -35,7 +35,6 @@ interface CanvasStyle {
 }
 
 export default function Home() {
-  // State management
   const [isVideoLoaded, setIsVideoLoaded] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
@@ -43,24 +42,31 @@ export default function Home() {
   const [fadeOut, setFadeOut] = useState<boolean>(false);
   const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
 
-  // Refs
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
+  const linkRef = useRef<HTMLAnchorElement | null>(null);
 
-  // Initialize canvas styles on mount
   useEffect(() => {
+    const handleScroll = async () => {
+      console.log(linkRef.current);
+      linkRef.current?.click();
+      window.removeEventListener("wheel", handleScroll);
+    };
+
+    window.addEventListener("wheel", handleScroll);
+
     const styles = Array.from({ length: NUM_PIECES }).map((_, index) => {
       const row = Math.floor(index / COLS);
       const col = index % COLS;
       const baseWidth = VIDEO_WIDTH / COLS;
       const baseHeight = VIDEO_HEIGHT / ROWS;
-      
+
       return {
         width: baseWidth,
         height: baseHeight,
         margin: 5,
         padding: 1,
-        opacity: 0.2 + Math.random() * 0.9,
+        opacity: 0.3 + Math.random() * 0.9,
         left: col * baseWidth,
         top: row * baseHeight,
         randomOffset: {
@@ -76,28 +82,30 @@ export default function Home() {
         }
       };
     });
-    
+
     setCanvasStyles(styles);
+
+    return () => {
+      window.removeEventListener("wheel", handleScroll);
+    }
   }, []);
 
-  // Video loading and canvas drawing effect
+
   useEffect(() => {
     if (!isVideoLoaded) {
       console.log('Video not loaded');
       return;
     }
-    
-    // Show text and arrow after video loads
-    setTimeout(() => { 
-      setIsTextVisible(true); 
-      setArrowVisible(true); 
+
+    setTimeout(() => {
+      setIsTextVisible(true);
+      setArrowVisible(true);
     }, 200);
 
-    // Canvas drawing function
     function draw() {
       const video = videoRef.current;
       if (!video || video.paused || video.ended) return;
-      
+
       canvasRefs.current.forEach((canvas, index) => {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -105,7 +113,7 @@ export default function Home() {
 
         const style = canvasStyles[index];
         if (!style) return;
-        
+
         const row = Math.floor(index / COLS);
         const col = index % COLS;
         const sourceWidth = VIDEO_WIDTH / COLS;
@@ -118,11 +126,10 @@ export default function Home() {
           0, 0, style.width + style.randomOffset.width, style.height + style.randomOffset.height // Destination area
         );
       });
-      
+
       requestAnimationFrame(draw);
     }
 
-    // Set up video play listener
     const handleVideoPlay = () => {
       draw();
     };
@@ -132,7 +139,6 @@ export default function Home() {
       video.addEventListener('play', handleVideoPlay);
     }
 
-    // Cleanup
     return () => {
       if (video) {
         video.removeEventListener('play', handleVideoPlay);
@@ -140,7 +146,6 @@ export default function Home() {
     };
   }, [isVideoLoaded, canvasStyles]);
 
-  // Video load handler
   const handleVideoLoad = () => {
     console.log('Video loaded');
     setIsVideoLoaded(true);
@@ -152,10 +157,10 @@ export default function Home() {
     setFadeOut(true);
   };
 
-  // Computed canvas style function
+  // Compute canvas style function
   const getCanvasStyle = (style: CanvasStyle | undefined) => {
     if (!style) return {};
-    
+
     return {
       left: `${style.left - style.randomOffset.x}px`,
       top: `${style.top}px`,
@@ -163,15 +168,19 @@ export default function Home() {
       padding: `${style.padding + style.randomOffset.padding}px`,
       opacity: isVideoLoaded ? style.opacity : 0,
       transition: "opacity 3s",
-      filter: "pixelate(1px)",
-      borderRadius: "25%",
+      filter: "contrast(1.3)",
+      borderRadius: "-30%",
       animation: `spin ${style.animation.duration}s linear infinite alternate`,
       animationDelay: `${style.animation.delay}s`,
+      sepia: "0.5",
+      width: `${style.width + style.randomOffset.width}px`,
+      height: `${style.height + style.randomOffset.height}px`,
+      mixBlendMode: "multiply",
     };
   };
 
   return (
-    <div className={`relative min-h-screen flex items-center justify-center bg-black overflow-visible ${fadeOut ? "opacity-0 transition-opacity duration-[3000s]" : ""}`}>
+    <div className={`relative min-h-screen h-[101vh] flex items-center justify-center bg-black overflow-visible ${fadeOut ? "opacity-0 transition-opacity duration-[3000s]" : ""}`}>
       <div
         className="relative overflow-visible"
         style={{
@@ -192,29 +201,37 @@ export default function Home() {
 
         {/* Render Canvas Grid */}
         {canvasStyles.map((style, index) => (
-          <canvas
-            key={index}
-            ref={(el) => { canvasRefs.current[index] = el; }}
-            width={style.width + style.randomOffset.width}
-            height={style.height + style.randomOffset.height}
-            className="absolute flicker inset-0"
-            style={getCanvasStyle(style)}
-          ></canvas>
+          <div className="absolute" key={index}>
+            <canvas
+              ref={(el) => { canvasRefs.current[index] = el; }}
+              className="absolute flicker inset-0 transform rotateY-180"
+              style={getCanvasStyle(style)}
+              width={style.width + style.randomOffset.width - index * 2}
+              height={style.height + style.randomOffset.height - index * 2}
+            ></canvas>
+
+            <div className="absolute inset-0 bg-pink-500 pointer-events-none flicker"
+              style={{...getCanvasStyle(style), opacity: Math.random() * 0.2}}
+            >
+            </div>
+          </div>
+
         ))}
       </div>
 
       {/* Animated Arrow Link */}
       <Link
         href="/intro"
-        className={`absolute bottom-6 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"}`}
+        className={`absolute w-5 h-5 border-r-yellow-950 bottom-6 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"}`}
         onClick={handleLinkClick}
+        ref={linkRef}
       >
-        <Image src={arrowDown} alt="Arrow down" className="w-auto h-auto animate-bounce border-r-pink-500" />
+        <Image src={arrowDown} alt="Arrow down" className="w-auto h-auto rounded-full animate-bounce border-r-pink-500" />
       </Link>
 
       {/* Text Overlay */}
       <div
-        className="fixed text-center text-white text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
+        className="fixed text-center  text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
         style={{ opacity: isTextVisible ? 1 : 0 }}
       >
         <h1 className="glitch font-bold text-5xl">MARCO HUWIG - WEB DEVELOPMENT</h1>
