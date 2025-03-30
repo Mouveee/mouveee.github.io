@@ -19,12 +19,12 @@ const NavigationMenu = () => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="text-white text-2xl font-bold">!</div>
+        <div className=" text-2xl font-bold">!</div>
       </div>
 
       {/* Menu Container */}
       <nav
-        className={`fixed bottom-10 right-10 p-4 bg-black text-white rounded-lg shadow-lg transition-transform transform duration-300 ease-in-out z-50 ${
+        className={`fixed bottom-10 right-10 p-4 bg-black  rounded-lg shadow-lg transition-transform transform duration-300 ease-in-out z-50 ${
           isHovered ? "scale-100 opacity-100" : "scale-0 opacity-0"
         }`}
         onMouseEnter={() => setIsHovered(true)}
