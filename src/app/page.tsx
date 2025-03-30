@@ -6,8 +6,10 @@ import Image from 'next/image';
 import arrowDown from '../assets/arrow_down.jpg';
 
 // Constants for video grid
-const ROWS = 5;
-const COLS = 9;
+const INNER_WIDTH = 1280;
+const INNER_HEIGHT = 720;
+const ROWS = 4; 
+const COLS = 7;
 const NUM_PIECES = ROWS * COLS;
 
 // Types
@@ -40,15 +42,20 @@ export default function Home() {
   const [fadeOut, setFadeOut] = useState<boolean>(false);
   const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
 
+  const homescreenRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
-    const handleScroll = async () => {
-      console.log(linkRef.current);
-      linkRef.current?.click();
-      window.removeEventListener("wheel", handleScroll);
+    const handleScroll = async (event: WheelEvent) => {
+      if (event.deltaY > 0 && homescreenRef.current) {            
+        homescreenRef.current.style.transition = "transform 5s ease-in-out";
+        homescreenRef.current.style.transform = "translateY(3000vh)";
+
+          linkRef.current?.click();
+        window.removeEventListener("wheel", handleScroll);
+      }
     };
 
     window.addEventListener("wheel", handleScroll);
@@ -56,8 +63,8 @@ export default function Home() {
     const styles = Array.from({ length: NUM_PIECES }).map((_, index) => {
       const row = Math.floor(index / COLS);
       const col = index % COLS;
-      const baseWidth = window.innerWidth / COLS;
-      const baseHeight = window.innerHeight / ROWS;
+      const baseWidth = INNER_WIDTH / COLS;
+      const baseHeight = INNER_HEIGHT / ROWS;
 
       return {
         width: baseWidth,
@@ -68,10 +75,10 @@ export default function Home() {
         left: col * baseWidth,
         top: row * baseHeight,
         randomOffset: {
-          width: Math.random() * 12,
-          height: Math.random() * 12,
-          margin: Math.random() * 12,
-          padding: Math.random() * 12,
+          width: Math.random() * 30,
+          height: Math.random() * 30,
+          margin: Math.random() * 2,
+          padding: Math.random() * 2,
           x: Math.random() * 12,
         },
         animation: {
@@ -91,7 +98,6 @@ export default function Home() {
 
   useEffect(() => {
     if (!isVideoLoaded) {
-      console.log('Video not loaded');
       return;
     }
 
@@ -114,14 +120,14 @@ export default function Home() {
 
         const row = Math.floor(index / COLS);
         const col = index % COLS;
-        const sourceWidth = window.innerWidth / COLS;
-        const sourceHeight = window.innerHeight / ROWS;
+        const sourceWidth = INNER_WIDTH / COLS;
+        const sourceHeight = INNER_HEIGHT / ROWS;
 
         ctx.clearRect(0, 0, style.width + style.randomOffset.width, style.height + style.randomOffset.height);
         ctx.drawImage(
           video,
-          col * sourceWidth, row * sourceHeight, sourceWidth, sourceHeight, // Source area
-          0, 0, style.width + style.randomOffset.width, style.height + style.randomOffset.height // Destination area
+          col * sourceWidth, row * sourceHeight, sourceWidth, sourceHeight,
+          0, 0, style.width + style.randomOffset.width, style.height + style.randomOffset.height
         );
       });
 
@@ -134,28 +140,29 @@ export default function Home() {
 
     const video = videoRef.current;
     if (video) {
+      if (!video) return;
+
       video.addEventListener('play', handleVideoPlay);
-    }
+      video.addEventListener('playing', handleVideoPlay);}
+    
 
     return () => {
       if (video) {
-        video.removeEventListener('play', handleVideoPlay);
+        video.addEventListener('play', handleVideoPlay);
+        video.removeEventListener('playing', handleVideoPlay);
       }
     };
   }, [isVideoLoaded, canvasStyles]);
 
   const handleVideoLoad = () => {
-    console.log('Video loaded');
     setIsVideoLoaded(true);
     setIsLoading(false);
   };
 
-  // Link click handler
   const handleLinkClick = () => {
     setFadeOut(true);
   };
 
-  // Compute canvas style function
   const getCanvasStyle = (style: CanvasStyle | undefined) => {
     if (!style) return {};
 
@@ -166,28 +173,26 @@ export default function Home() {
       padding: `${style.padding + style.randomOffset.padding}px`,
       opacity: isVideoLoaded ? style.opacity : 0,
       transition: "opacity 3s",
-      filter: "contrast(1.3)",
-      borderRadius: "-30%",
       animation: `spin ${style.animation.duration}s linear infinite alternate`,
       animationDelay: `${style.animation.delay}s`,
-      sepia: "0.5",
       width: `${style.width + style.randomOffset.width}px`,
       height: `${style.height + style.randomOffset.height}px`,
       mixBlendMode: "screen" as const,
+      borderRadius: "50px",
+      filter: "blur(0px) brightness(0.8) contrast(1.2) grayscale(0.5) hue-rotate(0deg) saturate(1.5)",
     };
   };
 
   return (
-    <div className={`relative min-h-screen h-[101vh] flex items-center justify-center bg-black overflow-visible ${fadeOut ? "opacity-0 transition-opacity duration-[3000s]" : ""}`}>
+    <div
+      className={`relative homescreen min-h-screen max-h-screen h-[100vh] overflow-hidden flex items-center justify-center bg-black ${fadeOut ? "opacity-0 transition-opacity duration-[3000s]" : ""}`}
+      ref={homescreenRef}>
       <div
-        className="relative overflow-visible"
+        className="absolute overflow-hidden w-full h-full"
         style={{
-          width: `100vw`,
-          height: `100vh`,
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
+          top: "0",
+          left: "0",
+          // transform: "translate(-50%, -50%)",
         }}
       >
         {/* Loading Spinner */}
@@ -204,12 +209,12 @@ export default function Home() {
               ref={(el) => { canvasRefs.current[index] = el; }}
               className="absolute flicker inset-0 transform rotateY-180"
               style={getCanvasStyle(style)}
-              width={style.width + style.randomOffset.width - index * 2}
-              height={style.height + style.randomOffset.height - index * 2}
+              width={style.width + style.randomOffset.width}
+              height={style.height + style.randomOffset.height}
             ></canvas>
 
             <div className="absolute inset-0 bg-pink-500 pointer-events-none flicker"
-              style={{...getCanvasStyle(style), opacity: Math.random() * 0.2, zIndex: -1}}
+              style={{ ...getCanvasStyle(style), opacity: Math.random() * 0.1, zIndex: 10, filter: "none" }}
             >
             </div>
           </div>
@@ -217,10 +222,9 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Animated Arrow Link */}
       <Link
         href="/intro"
-        className={`absolute w-5 h-5 border-r-yellow-950 bottom-6 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"}`}
+        className={`absolute w-5 h-5 border-r-yellow-950 bottom-12 right-10 transition-opacity duration-1000 z-50 ease-in-out ${arrowVisible ? "opacity-100" : "opacity-0"}`}
         onClick={handleLinkClick}
         ref={linkRef}
       >
@@ -229,22 +233,21 @@ export default function Home() {
 
       {/* Text Overlay */}
       <div
-        className="fixed text-left bottom-8 left-6  text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
+        className="fixed text-left bottom-10 left-8  text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
         style={{ opacity: isTextVisible ? 1 : 0 }}
       >
         <h1 className="glitch font-bold text-5xl">MARCO HUWIG - WEB DEVELOPMENT</h1>
       </div>
 
-      {/* Hidden Video (Used as a Source for Canvas) */}
+      {/* Hidden Video */}
       <video
         id="sourceVideo"
-        className="absolute opacity-0 grayscale"
+        className="absolute opacity-0 object-cover"
         ref={videoRef}
         src="/myself.mp4"
         autoPlay
         loop
         muted
-        playsInline
         onLoadedData={handleVideoLoad}
       />
     </div>
