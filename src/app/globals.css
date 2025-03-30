@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #D8D1B1;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #D8D1B1;
   }
 }
 
@@ -34,7 +34,7 @@ body {
     transform: rotateY(0deg);
   }
   to {
-    transform: rotateY(25deg);
+    transform: rotateY(26deg);
   }
 }
 
