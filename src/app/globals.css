@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0a0a;
+  --background: #000000;
   --foreground: #D8D1B1;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #000000;
     --foreground: #D8D1B1;
   }
 }
@@ -38,6 +38,42 @@ body {
   }
 }
 
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
+.animate-bgMove {
+  background-size: 200% 200%;
+  animation: bgMove 10s infinite alternate ease-in-out;
+}
 
+::-webkit-scrollbar {
+  width: 12px;
+  height: 4px;
+}
 
+::-webkit-scrollbar-track {
+  background-color: #333333;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  border: 2px solid #333333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(236 72 153);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #333333;
+}
+
+/* For Firefox */
+/* * {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(236 72 153) #333333;
+} */
