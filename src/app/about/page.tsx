@@ -4,12 +4,16 @@ import React from "react";
 import NavigationMenu from "@/app/components/NavigationMenu";
 import Dots from "@/app/components/Dots";
 import Image from "next/image";
-import murakami from "@/assets/murakami.jpg";
-import twinPeaks from "@/assets/twin_peaks.jpg";
-
-interface ASCIIAnimation {
-    [key: string]: string[];
-}
+import twinPeaks from "@/assets/twinPeaks.png";
+import murakami from "@/assets/murakami.png";
+import gatsby from "@/assets/gatsby.png";
+import zelda from "@/assets/zelda.png";
+import junjiIto from "@/assets/junjiIto.png";
+import jpegmafia from "@/assets/jpegMafia.png";
+import radiohead from "@/assets/radiohead.png";
+import sufjan from "@/assets/radiohead.png";
+import flyingLotus from "@/assets/flyingLotus.png";
+import eternalSunshine from "@/assets/eternalSunshine.png";
 
 interface Category {
     title: string;
@@ -17,122 +21,6 @@ interface Category {
 }
 
 export default function About() {
-    const asciiAnimations: ASCIIAnimation = {
-        murakami: [
-            "    (o)     (o)   ",
-            "     |       |    ",
-            "    /|\\_____/|\\  ",
-            "   / |       | \\ ",
-            "  /  |  ---  |  \\",
-            "    / |     | \\  "
-        ],
-        gatsby: [
-            "    .     *",
-            "  *    o    *",
-            "      /\    ",
-            "   * /  \\ *  ",
-            "     ||     ",
-            "   __||__    "
-        ],
-        twinPeaks: [
-            "   ,___,    ",
-            "  [o,o]     ",
-            "  |)  (|     ",
-            '  --"--"--   ',
-            "   /   \\    ",
-            "  /     \\   "
-        ],
-        zelda: [
-            "        /\\        ",
-            "       /  \\       ",
-            "      /____\\      ",
-            "     /\\    /\\     ",
-            "    /  \\  /  \\    ",
-            "   /____\\/____\\   "
-        ]
-        ,
-        junjiIto: [
-            "   .-.      ",
-            "  (O O)     ",
-            "  | O |     ",
-            "  |   |     ",
-            "  |   |     ",
-            "   `-'      "
-        ],
-        jpegmafia: [
-            "  ||  ",
-            " |||| ",
-            "  ||  ",
-            "  ||  ",
-            "  ||  ",
-            "  ||  "
-        ],
-        radiohead: [
-            "     ___     ",
-            "    /   \\    ",
-            "   | O O |   ",
-            "    \\_^_/    ",
-            "     | |     ",
-            "    /   \\    "
-        ],
-        sufjan: [
-            "    /\\    /\\    ",
-            "   /  \\  /  \\   ",
-            "  /    \\/    \\  ",
-            "  \\          /  ",
-            "   \\        /   ",
-            "    \\      /    "
-        ],
-        flyingLotus: [
-            "    ^    ^    ",
-            "   / \\  / \\   ",
-            "  /   \\/   \\  ",
-            " /    /\    \\ ",
-            " \\   /  \\   / ",
-            "  \\ /    \\ /  "
-        ],
-        kateBush: [
-            "     .--.      ",
-            "  .-(    ).    ",
-            " (        )   ",
-            "  `-.____.-'   ",
-            "    / // /      ",
-            "     // / /      "
-        ],
-        movieNerd: [
-            "   ________   ",
-            "  /        \\  ",
-            " |  [o] [o] | ",
-            " |    ||    | ",
-            "  \\________/  ",
-            "    |    |    "
-        ],
-        ableton: [
-            "  |----|----|----|----|  ",
-            "  |    |    |    |    |  ",
-            "  |----|----|----|----|  ",
-            "  |    |    |    |    |  ",
-            "  |----|----|----|----|  ",
-            "  |    |    |    |    |  "
-        ],
-        totoro: [
-            "⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⡆⠀⠀⢀⣶⠀⠀⠀",
-            "⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣇⣀⣀⣼⣿⠆⠀⠀",
-            " ⠀⠀⠀⠀⠀⠀⠀⣠⡟⡝⣿⣿⣿⠿⢯⠀⠀⠀",
-            "⣀⠀⢀⣆⠀⠀⣰⣿⣷⣶⣿⣿⣿⣭⣼⣇⠀⠀",
-            "⢹⣷⣼⡿⡄⢰⣿⠟⣁⠀⣀⠈⠙⣿⣿⣿⣀⠀",
-            "⢸⣦⣿⣷⣷⠈⡏⠈⠉⠈⠉⠈⠓⢿⣿⣿⣿⡇",
-        ],eternalSunshine: [
-            "      \\   /      ",
-            "       .-.       ",
-            "    --(   )--    ",
-            "       `-'       ",
-            "      /   \\      ",
-            "                 ",
-         ]
-    };
-
-    // Dummy text for each category
     const dummyTexts: { [key: string]: string } = {
         murakami: "Haruki Murakami is a master of magical realism, blending surreal elements with everyday life.",
         gatsby: "The Great Gatsby explores themes of wealth, love, and the American Dream in the Jazz Age.",
@@ -179,7 +67,7 @@ export default function About() {
                     key: "eternalSunshine",
                     label: "Eternal Sunshine of the Spotless Mind"
                 }
-            ]   
+            ]
         },
         {
             title: "Music",
@@ -187,10 +75,6 @@ export default function About() {
                 {
                     key: "radiohead",
                     label: "Radiohead"
-                },
-                {
-                    key: "sufjan",
-                    label: "Sufjan Stevens"
                 },
                 {
                     key: "flyingLotus",
@@ -231,10 +115,23 @@ export default function About() {
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                             {category.interests.map((item, index) => (
                                 <div key={index} className="perspective-1000">
-                                    <div className="tile w-full p-4 border-l-4 border-pink-500 bg-black rounded-lg shadow-lg hover:bg-[#222] transition-transform duration-300 flex flex-col items-center">
+                                    <div className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">
                                         {/* Front Side with ASCII Animation */}
-                                        <div className="tile-inner relative w-full h-full transform-style-preserve-3d text-center">
-                                            <pre className="text-pink-500 leading-4 font-mono text-xs m-auto"><Image src={twinPeaks} alt="fsd"></Image></pre>
+                                        <div className="tile-inner relative w-full h-full transform-style-preserve-3d text- bg-[#0d0d0d]">
+                                            <pre className="text-pink-500 leading-4 font-mono text-xs m-auto">
+                                                <Image src={
+                                                    item.key === "murakami" ? murakami : 
+                                                    item.key === "gatsby" ? gatsby : 
+                                                    item.key === "twinPeaks" ? twinPeaks : 
+                                                    item.key === "zelda" ? zelda : 
+                                                    item.key === "junjiIto" ? junjiIto : 
+                                                    item.key === "jpegmafia" ? jpegmafia : 
+                                                    item.key === "radiohead" ? radiohead : 
+                                                    item.key === "sufjan" ? sufjan : 
+                                                    item.key === "flyingLotus" ? flyingLotus : 
+                                                    item.key === "eternalSunshine" ? eternalSunshine :
+                                                    item.key === "totoro" ? '' : ''
+                                                } alt={item.label} className="w-full h-full m-auto" /></pre>
                                             {/* Caption */}
                                             <p className="text-s text-gray-300 uppercase font-bold mt-5">{item.label}</p>
 
@@ -282,8 +179,8 @@ export default function About() {
                     backface-visibility: hidden;
                     transform: rotateY(180deg);
                 }
-            `}</style>  
-            <Dots numberOfDots={20} className="absolute inset-0 z-0" />
+            `}</style>
+            <Dots numberOfDots={20} />
             <NavigationMenu />
         </div>
     );
