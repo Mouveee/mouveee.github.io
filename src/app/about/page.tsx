@@ -2,6 +2,10 @@
 
 import React from "react";
 import NavigationMenu from "@/app/components/NavigationMenu";
+import Dots from "@/app/components/Dots";
+import Image from "next/image";
+import murakami from "@/assets/murakami.jpg";
+import twinPeaks from "@/assets/twin_peaks.jpg";
 
 interface ASCIIAnimation {
     [key: string]: string[];
@@ -118,7 +122,14 @@ export default function About() {
             "⣀⠀⢀⣆⠀⠀⣰⣿⣷⣶⣿⣿⣿⣭⣼⣇⠀⠀",
             "⢹⣷⣼⡿⡄⢰⣿⠟⣁⠀⣀⠈⠙⣿⣿⣿⣀⠀",
             "⢸⣦⣿⣷⣷⠈⡏⠈⠉⠈⠉⠈⠓⢿⣿⣿⣿⡇",
-        ]
+        ],eternalSunshine: [
+            "      \\   /      ",
+            "       .-.       ",
+            "    --(   )--    ",
+            "       `-'       ",
+            "      /   \\      ",
+            "                 ",
+         ]
     };
 
     // Dummy text for each category
@@ -135,7 +146,8 @@ export default function About() {
         kateBush: "Kate Bush is an iconic British singer-songwriter known for her ethereal voice and innovative music.",
         movieNerd: "Film nerds are passionate about exploring every detail of a movie's history, techniques, and impact.",
         ableton: "Ableton Live is a popular music production software used by artists to create electronic music.",
-        totoro: "Totoro is a beloved character from Studio Ghibli's animated film 'My Neighbor Totoro,' symbolizing childhood innocence."
+        totoro: "Totoro is a beloved character from Studio Ghibli's animated film 'My Neighbor Totoro,' symbolizing childhood innocence.",
+        eternalSunshine: "Eternal Sunshine of the Spotless Mind is a mind-bending romance film that explores memory, love, and loss."
     };
 
     const categories: Category[] = [
@@ -149,7 +161,7 @@ export default function About() {
                 {
                     key: "gatsby",
                     label: "The Great Gatsby"
-                }
+                },
             ]
         },
         {
@@ -162,16 +174,16 @@ export default function About() {
                 {
                     key: "totoro",
                     label: "Studio Ghibli"
+                },
+                {
+                    key: "eternalSunshine",
+                    label: "Eternal Sunshine of the Spotless Mind"
                 }
-            ]
+            ]   
         },
         {
             title: "Music",
             interests: [
-                {
-                    key: "jpegmafia",
-                    label: "JPEGMAFIA"
-                },
                 {
                     key: "radiohead",
                     label: "Radiohead"
@@ -184,10 +196,6 @@ export default function About() {
                     key: "flyingLotus",
                     label: "Flying Lotus"
                 },
-                {
-                    key: "kateBush",
-                    label: "Kate Bush"
-                }
             ]
         },
         {
@@ -205,16 +213,12 @@ export default function About() {
                     key: "junjiIto",
                     label: "Junji Ito"
                 },
-                {
-                    key: "movieNerd",
-                    label: "Film Nerd"
-                },
             ]
         }
     ];
 
     return (
-        <div className="relative min-h-screen flex flex-col items-center justify-center bg-black text-white px-8 overflow-hidden p-10">
+        <div className="relative min-h-screen text-center flex flex-col items-center justify-center px-8 overflow-hidden p-10">
             <div className="absolute inset-0 bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove z-0"></div>
             <h1 className="text-5xl font-bold tracking-wide uppercase text-center z-10">
                 About Me
@@ -227,10 +231,10 @@ export default function About() {
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                             {category.interests.map((item, index) => (
                                 <div key={index} className="perspective-1000">
-                                    <div className="tile w-full p-4 border-l-4 border-pink-500 bg-[#141414] rounded-lg shadow-lg hover:bg-[#222] transition-transform duration-300 flex flex-col items-center">
+                                    <div className="tile w-full p-4 border-l-4 border-pink-500 bg-black rounded-lg shadow-lg hover:bg-[#222] transition-transform duration-300 flex flex-col items-center">
                                         {/* Front Side with ASCII Animation */}
                                         <div className="tile-inner relative w-full h-full transform-style-preserve-3d text-center">
-                                            <pre className="text-pink-500 leading-4 font-mono text-xs m-auto">{asciiAnimations[item.key].join("\n")}</pre>
+                                            <pre className="text-pink-500 leading-4 font-mono text-xs m-auto"><Image src={twinPeaks} alt="fsd"></Image></pre>
                                             {/* Caption */}
                                             <p className="text-s text-gray-300 uppercase font-bold mt-5">{item.label}</p>
 
@@ -278,7 +282,8 @@ export default function About() {
                     backface-visibility: hidden;
                     transform: rotateY(180deg);
                 }
-            `}</style>
+            `}</style>  
+            <Dots numberOfDots={20} className="absolute inset-0 z-0" />
             <NavigationMenu />
         </div>
     );
