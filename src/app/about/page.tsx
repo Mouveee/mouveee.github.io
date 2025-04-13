@@ -108,11 +108,11 @@ export default function About() {
                 About Me
             </h1>
 
-            <div className="mt-12 space-y-8 w-full max-w-4xl z-10 text-center">
+            <div className="mt-12 space-y-8 w-full max-w-4xl z-1 text-center">
                 {categories.map((category, catIndex) => (
                     <div key={catIndex}>
                         <h2 className="text-2xl self-center font-semibold mb-4 uppercase">{category.title}</h2>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-3 sm:grid-cols-3 gap-6">
                             {category.interests.map((item, index) => (
                                 <div key={index} className="perspective-1000">
                                     <div className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">
