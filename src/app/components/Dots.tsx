@@ -37,7 +37,7 @@ export default function Dots( { numberOfDots }: { numberOfDots: number }) {
   }, [numberOfDots]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden -z-50">
       {dots.map((dot, index) => (
         <div
           key={index}
