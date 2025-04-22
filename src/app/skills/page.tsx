@@ -45,8 +45,6 @@ export default function Skills() {
                 {skills && skills.map((category, index) => (
                     <div
                         key={index}
-                        onMouseEnter={() => setHoveredCategory(index)}
-                        onMouseLeave={() => setHoveredCategory(-1)}
                     >
                         <h2 className="text-3xl font-bold mb-4">{category.name}</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
