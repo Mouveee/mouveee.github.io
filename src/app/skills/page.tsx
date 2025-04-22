@@ -1,53 +1,113 @@
 'use client';
 
-import React, { useState } from 'react';
-import NavigationMenu from '@/app/components/NavigationMenu';
-import Dots from '@/app/components/Dots';
+import React, { useEffect, useState } from "react";
+import NavigationMenu from "@/app/components/NavigationMenu";
+import Dots from "@/app/components/Dots";
 
-const skills = [
-  { category: "Frontend", items: ["JavaScript (TypeScript)", "HTML, CSS (Sass, Tailwind)", "React, Next.js, Vue, Angular (sehr rudimentär)"] },
-  { category: "Backend", items: ["Node.js (Express)", "PHP (Drupal 7 & Drupal 10)"] },
-  { category: "Databases & Servers", items: ["MySQL, MongoDB", "Nginx, Apache", "Linux Shell"] },
-  { category: "Tools & Platforms", items: ["Gitlab, Github", "Jira, Confluence", "Azure", "Firebase Messaging, APNS"] },
-  { category: "Qualifications", items: ["Fachinformatiker Anwendungsentwicklung (IHK Saar)", "MS-Exam 70-480 Programming with JS, HTML and CSS"] },
-];
+interface Skills {
+    name: string;
+    label: string;
+    skills: SkillItem[];
+}
+
+interface SkillItem {
+    name: string;
+    label: string;
+    description: string;
+    icon: string;
+}
 
 
 export default function Skills() {
-  const [hoveredCategory, setHoveredCategory] = useState<number>(-1);
+    const [skills, setskills] = useState<Skills[] | null>(null);
+    const [hoveredCategory, setHoveredCategory] = useState<number>(-1);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove">
-      <div className="max-w-3xl w-full bg-black p-8 rounded-lg shadow-lg border border-gray-800 opacity-90">
-        <h1 className="text-5xl font-semibold mb-8 text-center uppercase">Technology Stack</h1>
-        <div className="divide-y divide-gray-900">
-          {skills.map((skill, index) => (
-            <div
-              key={index}
-              className="py-6 px-4 hover:bg-gray-800 transition-all duration-300 rounded-md"
-              onMouseEnter={() => setHoveredCategory(index)}
-              onMouseLeave={() => setHoveredCategory(-1)}
-            >
-              <h2 className="text-2xl font-semibold mb-3 flex items-center uppercase">
-                {skill.category}
-              </h2>
-              <ul className="space-y-2 text-gray-300">
-                {skill.items.map((item, i) => (
-                  <li
-                    key={i}
-                    className={`text-lg transition-all duration-300 ${hoveredCategory === index ? ' font-medium' : ''}`}
-                  >
-                    {item}
-                  </li>
+    useEffect(() => {
+        const fetchSkills = async () => {
+            const response = await fetch("skills/api", { cache: "no-store" });
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+            const data = await response.json();
+            setskills(data);
+        };
+        fetchSkills();
+    }
+        , []);
+
+    return (
+        <div className="relative min-h-screen text-center flex flex-col items-center justify-center px-8 overflow-hidden p-10">
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove z-0"></div>
+            <h1 className="text-5xl font-bold tracking-wide uppercase text-center z-10">
+                Skills & Erfahrung
+            </h1>
+
+            <div className="mt-12 space-y-8 w-full max-w-4xl z-1 text-center">
+                {skills && skills.map((category, index) => (
+                    <div
+                        key={index}
+                        onMouseEnter={() => setHoveredCategory(index)}
+                        onMouseLeave={() => setHoveredCategory(-1)}
+                    >
+                        <h2 className="text-3xl font-bold mb-4">{category.name}</h2>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                            {skills[index].skills.map((skill, index) => (
+                                <div key={index} className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">
+                                    <div className="tile-inner relative w-full h-full transform-style-preserve-3d text- bg-[#0d0d0d]">
+                                        <div className="tile-front bg-gray-800 text-white p-4 rounded-lg shadow-lg flex items-center justify-center h-full flex-col">
+                                            <pre className="text-pink-500 leading-4 font-mono text-2xl sm:text-1xl m-auto p-5">
+                                                {skill.icon}
+                                            </pre>
+                                            <div className="text-lg font-semibold m-2">
+                                                {skill.label}
+                                            </div>
+                                        </div>
+                                        <div className="tile-back absolute tile-back absolute inset-0 bg-[#222] text-xs font-semibold transform rotateY-18 0bg-gray-700 text-white p-4 rounded-lg shadow-lg flex items-center justify-center h-full space-y-2">
+                                            {skill.description}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 ))}
-              </ul>
             </div>
-          ))}
-        </div>
-      </div>
 
-      <Dots numberOfDots={20} />
-      <NavigationMenu />
-    </div>
-  );
+            <style jsx>{`
+                @keyframes bgMove {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+                .animate-bgMove {
+                    background-size: 200% 200%;
+                    animation: bgMove 10s infinite alternate ease-in-out;
+                }
+                .perspective-1000 {
+                    perspective: 1000px;
+                }
+                .tile {
+                    position: relative;
+                    transform-style: preserve-3d;
+                    transition: transform 0.6s;
+                }
+                .tile:hover {
+                    transform: rotateY(180deg);
+                }
+                .tile-inner {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    transform-style: preserve-3d;
+                }
+                .tile-back {
+                    backface-visibility: hidden;
+                    transform: rotateY(180deg);
+                }
+            `}</style>
+
+            <Dots numberOfDots={20} />
+            <NavigationMenu />
+        </div>
+    );
 }
