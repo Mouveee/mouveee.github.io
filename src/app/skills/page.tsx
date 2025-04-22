@@ -20,7 +20,6 @@ interface SkillItem {
 
 export default function Skills() {
     const [skills, setskills] = useState<Skills[] | null>(null);
-    const [hoveredCategory, setHoveredCategory] = useState<number>(-1);
 
     useEffect(() => {
         const fetchSkills = async () => {
