@@ -1,6 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import postgres from "postgres";
 
+interface Category {
+  name: string;
+  id: number;
+  skills: SkillItem[];
+};
+
+interface SkillItem {
+  name: string;
+  label: string;
+  description: string;
+  icon: string;
+}
+
 // Singleton pattern to prevent connection pool exhaustion during development
 const globalForDb = global as unknown as { sql: ReturnType<typeof postgres> };
 
@@ -11,8 +24,8 @@ if (process.env.NODE_ENV !== "production") globalForDb.sql = sql;
 
 export async function GET() {
   try {
-    const skills = await sql`SELECT * FROM skills`;
-    const categories = await sql`SELECT * FROM categories`;
+    const skills = await sql`SELECT * FROM skills ORDER BY id`;
+    const categories = await sql`SELECT * FROM categories ORDER BY id`;
 
     categories.forEach((category) => {
       category.skills = skills.filter(
@@ -32,11 +45,21 @@ export async function GET() {
 
 export async function POST(data: NextRequest) {
   try {
-    return NextResponse.json(data, { status: 200 });
+    const body = await data.json();
+
+    await Promise.all(
+      body.map(async (category: Category) => {
+        await sql`UPDATE categories
+        SET name = ${category.name}
+        WHERE id = ${category.id}`;
+      })
+    );
+
+    return NextResponse.json("YAY!!!!", { status: 200 });
   } catch (error) {
     console.error("Database error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch data" },
+      { error: "Failed: " + error },
       { status: 500 }
     );
   }
