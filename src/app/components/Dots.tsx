@@ -20,7 +20,7 @@ export default function Dots( { numberOfDots }: { numberOfDots: number }) {
       top: `${Math.random() * 100}vh`,
       left: `${Math.random() * 100}vw`,
       size: `${Math.random() * 100 + 100}px`,
-      opacity: Math.random() * 0.5 + 0.3,
+      opacity: Math.random() * 0.08 + 0.2,
       delay: `${Math.random() * 2}s`,
       speed: Math.random() * 0.12,
       spinSpeed: Math.random() * 5 + 8,
