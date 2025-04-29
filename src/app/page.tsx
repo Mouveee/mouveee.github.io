@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import arrowDown from '../assets/arrow_down.jpg';
+import Dots from "@/app/components/Dots";
+import NavigationMenu from './components/NavigationMenu';
 
 let INNER_WIDTH = 0;
 let INNER_HEIGHT = 0;
-const ROWS = 3;
-const COLS = 6;
+let ROWS = 3;
+let COLS = 6;
 const NUM_PIECES = ROWS * COLS;
 
 interface CanvasStyle {
@@ -36,8 +35,6 @@ export default function Home() {
   const [isVideoLoaded, setIsVideoLoaded] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
-  const [arrowVisible, setArrowVisible] = useState<boolean>(false);
-  const [fadeOut, setFadeOut] = useState<boolean>(false);
   const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -47,10 +44,9 @@ export default function Home() {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
-    if (homescreenRef.current) {
-      INNER_WIDTH = window.innerWidth * 11 / 12;
-      INNER_HEIGHT = window.innerHeight * 11 / 12;
-    }
+    INNER_WIDTH = window.innerWidth * 10 / 12;
+    INNER_HEIGHT = window.innerHeight * 10 / 12;
+
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -108,39 +104,38 @@ export default function Home() {
 
     setTimeout(() => {
       setIsTextVisible(true);
-      setArrowVisible(true);
     }, 200);
 
     function draw() {
       const video = videoRef.current;
       if (!video || video.paused || video.ended) return;
-    
+
       canvasRefs.current.forEach((canvas, index) => {
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
-    
+
         const style = canvasStyles[index];
         if (!style) return;
-    
+
         const row = Math.floor(index / COLS);
         const col = index % COLS;
-    
+
         const sourceWidth = (video.videoWidth / COLS);
         const sourceHeight = (video.videoHeight / ROWS);
-    
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
         ctx.drawImage(
           video,
           col * sourceWidth, row * sourceHeight, sourceWidth, sourceHeight,
           0, 0, canvas.width, canvas.height
         );
       });
-    
+
       requestAnimationFrame(draw);
     }
-    
+
 
     const handleVideoPlay = () => {
       draw();
@@ -163,13 +158,19 @@ export default function Home() {
     };
   }, [isVideoLoaded, canvasStyles]);
 
+  useEffect(() => {
+    if (isMobile) {
+      ROWS = 2;
+      COLS = 4;
+    } else {
+      ROWS = 3;
+      COLS = 6;
+    }
+  }, [isMobile]);
+
   const handleVideoLoad = () => {
     setIsVideoLoaded(true);
     setIsLoading(false);
-  };
-
-  const handleLinkClick = () => {
-    setFadeOut(true);
   };
 
   const getCanvasStyle = (style: CanvasStyle | undefined) => {
@@ -188,17 +189,18 @@ export default function Home() {
       height: `${style.height + style.randomOffset.height}px`,
       mixBlendMode: "screen" as const,
       borderRadius: "12px",
-      filter: "blur(1px) contrast(1.1) grayscale(0.8) hue-rotate(0deg) saturate(0.1)",
+      filter: "blur(1px) contrast(1.1) grayscale(2) hue-rotate(0deg) saturate(0.1)",
     };
   };
 
   return (
     <div
-      className={`relative m-auto homescreen min-h-screen h-[100vh] overflow-y-clip flex items-center justify-center bg-black ${fadeOut ? "opacity-0 transition-opacity duration-[3000s]" : ""} bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove`}
-      ref={homescreenRef}>
+      className={`relative m-auto homescreen min-h-screen h-[100vh] overflow-y-clip flex items-center justify-center bg-black`}>
       <div
         className="relative m-auto overflow-y-clip w-11/12 h-[91.6%] items-center justify-center"
       >
+        <Dots numberOfDots={20} />
+
         {/* Loading Spinner */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -217,8 +219,8 @@ export default function Home() {
               height={style.height + style.randomOffset.height}
             ></canvas>
 
-            <div className="absolute inset-0 bg-pink-500 pointer-events-none flicker"
-              style={{ ...getCanvasStyle(style),opacity: 0.02 +  Math.random() * 0.1, zIndex: 10, filter: "none" }}
+            <div className="absolute inset-0 bg-pink-800 pointer-events-none flicker"
+              style={{ ...getCanvasStyle(style), opacity: 0.02 + Math.random() * 0.1, zIndex: 10, filter: "none" }}
             >
             </div>
           </div>
@@ -226,18 +228,10 @@ export default function Home() {
         ))}
       </div>
 
-      <Link
-        href="/intro"
-        className={isMobile ? 
-          "absolute w-5 h-5 border-r-yellow-950 bottom-12 right-10 transition-opacity duration-1000 z-50 ease-in-out rounded-full bg-pink-500 shadow-lg cursor-pointer animate-bounce z-49 border-2 border-white" :
-          `absolute w-5 h-5 border-r-yellow-950 bottom-12 right-10 transition-opacity duration-1000 z-50 ease-in-out rounded-full bg-pink-500 shadow-lg cursor-pointer animate-bounce z-49 border-2 border-white ${arrowVisible ? "opacity-100" : "opacity-0"}`}
-        onClick={handleLinkClick}
-        ref={linkRef}
-      >
-        <Image src={arrowDown} alt="Arrow down" className={isMobile ?
-          "w-auto h-auto rounded-full animate-bounce border-r-pink-500" :
-          "w-auto h-auto rounded-full animate-bounce border-r-pink-500"} />
-      </Link>
+      {/* Navigation Menu */}
+      <NavigationMenu />
+
+      {/* Arrow Down */}
 
       {/* Text Overlay */}
       <div
@@ -252,12 +246,13 @@ export default function Home() {
         id="sourceVideo"
         className="absolute opacity-0"
         ref={videoRef}
-        src="/myself.mp4"
+        src="/api/stream"
         autoPlay
         loop
         muted
         onLoadedData={handleVideoLoad}
       />
+
     </div>
   );
 }
