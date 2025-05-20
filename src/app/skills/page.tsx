@@ -41,12 +41,12 @@ export default function Skills() {
                 Skills & Erfahrung
             </h1>
 
-            <div className="mt-12 space-y-8 w-full max-w-4xl z-1 text-center">
+            <div className="mt-12 space-y-8 w-full max-w-4xl z-50 text-center">
                 {skills && skills.map((category, index) => (
                     <div
                         key={index}
                     >
-                        <h2 className="text-3xl font-bold mb-4">{category.name}</h2>
+                        <h2 className="text-3xl font-bold mb-4 z-50">{category.name}</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
                             {skills[index].skills.map((skill, index) => (
                                 <div key={index} className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">
