@@ -15,7 +15,7 @@ const NavigationMenu = () => {
   return (
     <div className="relative">
       <div
-        className="fixed h-10 w-10 flex items-center justify-center bottom-10 right-10 p-4 rounded-full bg-pink-500 shadow-lg cursor-pointer animate-bounce z-50 border-2 border-white"
+        className="fixed h-10 w-10 flex items-center justify-center bottom-10 right-1/2 sm:right-10 p-4 rounded-full bg-pink-500 shadow-lg cursor-pointer animate-bounce z-50 border-2 border-white"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -24,7 +24,7 @@ const NavigationMenu = () => {
 
       {/* Menu Container */}
       <nav
-        className={`fixed bottom-10 right-10 p-4 bg-black  rounded-lg shadow-lg transition-transform transform duration-300 ease-in-out z-50 ${
+        className={`fixed right-1/2 bottom-10 sm:right-10 p-4 bg-black  rounded-lg shadow-lg transition-transform transform duration-300 ease-in-out z-50 ${
           isHovered ? "scale-100 opacity-100" : "scale-0 opacity-0"
         }`}
         onMouseEnter={() => setIsHovered(true)}
