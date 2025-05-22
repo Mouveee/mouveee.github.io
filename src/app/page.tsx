@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Dots from "@/app/components/Dots";
 import NavigationMenu from './components/NavigationMenu';
 
 let INNER_WIDTH = 0;
