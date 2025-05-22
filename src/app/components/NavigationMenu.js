@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 const NavigationMenu = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -36,21 +37,31 @@ const NavigationMenu = () => {
               currentPath === "/intro" ? "hidden" : ""
             }`}
           >
-            <a href="/intro">Intro</a>
+            <Link href="/intro">Intro</Link>
           </li>
+
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
               currentPath === "/skills" ? "hidden" : ""
             }`}
           >
-            <a href="/skills">Skills</a>
+            <Link href="/skills">Skills</Link>
           </li>
+
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
               currentPath === "/about" ? "hidden" : ""
             }`}
           >
-            <a href="/about">About</a>
+            <Link href="/about">About</Link>
+          </li>
+
+          <li
+            className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
+              currentPath === "/contact" ? "hidden" : ""
+            }`}
+          >
+            <Link href="/contact">Kontakt</Link>
           </li>
         </ul>
       </nav>
