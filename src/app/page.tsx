@@ -70,7 +70,7 @@ export default function Home() {
       return {
         width: baseWidth,
         height: baseHeight,
-        margin: 2,
+        margin: 12,
         padding: 1,
         opacity: 0.7 + Math.random() * 0.1,
         left: col * baseWidth,
@@ -179,7 +179,7 @@ export default function Home() {
     return {
       left: `${style.left - style.randomOffset.x}px`,
       top: `${style.top}px`,
-      margin: `${style.margin + style.randomOffset.margin}px`,
+      margin: `${style.margin + style.randomOffset.margin * 2}px`,
       padding: `${style.padding + style.randomOffset.padding}px`,
       opacity: isVideoLoaded ? style.opacity : 0,
       transition: "opacity 3s",
@@ -197,9 +197,15 @@ export default function Home() {
     <div
       className={`relative m-auto homescreen min-h-screen h-[100vh] overflow-y-clip flex items-center justify-center bg-black`}>
       <div
-        className="relative m-auto overflow-y-clip w-11/12 h-[91.6%] items-center justify-center"
+        className="relative m-auto overflow-y-clip w-10/12 h-[83.3%] items-center justify-center"
       >
-        <Dots numberOfDots={20} />
+        {/* Text Overlay */}
+        <div
+          className="fixed text-left top-10 left-8  text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
+          style={{ opacity: isTextVisible ? 1 : 0 }}
+        >
+          <h1 className="glitch font-bold text-5xl">MARCO HUWIG - WEB DEVELOPMENT</h1>
+        </div>
 
         {/* Loading Spinner */}
         {isLoading && (
@@ -230,16 +236,6 @@ export default function Home() {
 
       {/* Navigation Menu */}
       <NavigationMenu />
-
-      {/* Arrow Down */}
-
-      {/* Text Overlay */}
-      <div
-        className="fixed text-left bottom-10 left-8  text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
-        style={{ opacity: isTextVisible ? 1 : 0 }}
-      >
-        <h1 className="glitch font-bold text-5xl">MARCO HUWIG - WEB DEVELOPMENT</h1>
-      </div>
 
       {/* Hidden Video */}
       <video
