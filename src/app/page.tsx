@@ -3,11 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NavigationMenu from './components/NavigationMenu';
 
-let INNER_WIDTH = 0;
-let INNER_HEIGHT = 0;
-let ROWS = 3;
-let COLS = 6;
-const NUM_PIECES = ROWS * COLS;
+let INNER_WIDTH = 1280;
+let INNER_HEIGHT = 768;
 
 interface CanvasStyle {
   width: number;
@@ -36,6 +33,11 @@ export default function Home() {
   const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
   const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [screenWidth, setScreenWidth] = useState<number>(1280);
+  const [screenHeight, setScreenHeight] = useState<number>(768);
+  const [rows, setRows] = useState<number>(3);
+  const [columns, setColumns] = useState<number>(6);
+  const [numPieces, setNumPieces] = useState<number>(18);
 
   const homescreenRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -43,14 +45,6 @@ export default function Home() {
   const linkRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
-    INNER_WIDTH = window.innerWidth * 10 / 12;
-    INNER_HEIGHT = window.innerHeight * 10 / 12;
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    handleResize();
-
     const handleScroll = async (event: WheelEvent) => {
       if (event.deltaY > 0 && homescreenRef.current) {
         linkRef.current?.click();
@@ -58,28 +52,65 @@ export default function Home() {
       }
     };
 
-    window.addEventListener("wheel", handleScroll);
+    const onResize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
-    const styles = Array.from({ length: NUM_PIECES }).map((_, index) => {
-      const row = Math.floor(index / COLS);
-      const col = index % COLS;
-      const baseWidth = INNER_WIDTH / COLS;
-      const baseHeight = INNER_HEIGHT / ROWS;
+      setScreenWidth(width);
+      setScreenHeight(height);
+
+      setIsMobile(window.innerWidth <= 768);
+
+      INNER_WIDTH = width * 10 / 12;
+      INNER_HEIGHT = height * 10 / 12;
+    }
+
+    window.addEventListener("wheel", handleScroll);
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("wheel", handleScroll);
+      window.removeEventListener("resize", onResize);
+    }
+  }, []);
+
+
+  useEffect(() => {
+    if (!isVideoLoaded || !window) {
+      return;
+    }
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    setScreenWidth(width);
+    setScreenHeight(height);
+
+    setIsMobile(window.innerWidth <= 768);
+
+    INNER_WIDTH = width * 10 / 12;
+    INNER_HEIGHT = height * 10 / 12;
+
+    const styles = Array.from({ length: numPieces }).map((_, index) => {
+      const row = Math.floor(index / columns);
+      const col = index % columns;
+      const baseWidth = INNER_WIDTH / columns;
+      const baseHeight = INNER_HEIGHT / rows;
 
       return {
         width: baseWidth,
         height: baseHeight,
-        margin: 12,
+        margin: 1,
         padding: 1,
         opacity: 0.7 + Math.random() * 0.1,
         left: col * baseWidth,
         top: row * baseHeight,
         randomOffset: {
-          width: Math.random() * 30,
-          height: Math.random() * 30,
+          width: Math.random() * 3,
+          height: Math.random() * 3,
           margin: Math.random() * 2,
           padding: Math.random() * 2,
-          x: Math.random() * 12,
+          x: Math.random() * 2,
         },
         animation: {
           duration: 1 + Math.random() * 2,
@@ -89,17 +120,6 @@ export default function Home() {
     });
 
     setCanvasStyles(styles);
-
-    return () => {
-      window.removeEventListener("wheel", handleScroll);
-    }
-  }, []);
-
-
-  useEffect(() => {
-    if (!isVideoLoaded) {
-      return;
-    }
 
     setTimeout(() => {
       setIsTextVisible(true);
@@ -117,11 +137,11 @@ export default function Home() {
         const style = canvasStyles[index];
         if (!style) return;
 
-        const row = Math.floor(index / COLS);
-        const col = index % COLS;
+        const row = Math.floor(index / columns);
+        const col = index % columns;
 
-        const sourceWidth = (video.videoWidth / COLS);
-        const sourceHeight = (video.videoHeight / ROWS);
+        const sourceWidth = (video.videoWidth / columns);
+        const sourceHeight = (video.videoHeight / rows);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -134,7 +154,6 @@ export default function Home() {
 
       requestAnimationFrame(draw);
     }
-
 
     const handleVideoPlay = () => {
       draw();
@@ -155,17 +174,13 @@ export default function Home() {
         video.removeEventListener('playing', handleVideoPlay);
       }
     };
-  }, [isVideoLoaded, canvasStyles]);
+  }, [isVideoLoaded, screenWidth, screenHeight]);
 
   useEffect(() => {
-    if (isMobile) {
-      ROWS = 2;
-      COLS = 4;
-    } else {
-      ROWS = 3;
-      COLS = 6;
-    }
-  }, [isMobile]);
+    setRows(isMobile ? 6 : 3)
+    setColumns(isMobile ? 3 : 6)
+  }, [isMobile])
+
 
   const handleVideoLoad = () => {
     setIsVideoLoaded(true);
@@ -178,7 +193,6 @@ export default function Home() {
     return {
       left: `${style.left - style.randomOffset.x}px`,
       top: `${style.top}px`,
-      margin: `${style.margin + style.randomOffset.margin * 2}px`,
       padding: `${style.padding + style.randomOffset.padding}px`,
       opacity: isVideoLoaded ? style.opacity : 0,
       transition: "opacity 3s",
@@ -203,7 +217,8 @@ export default function Home() {
           className="fixed text-left top-10 left-8  text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
           style={{ opacity: isTextVisible ? 1 : 0 }}
         >
-          <h1 className="glitch font-bold text-5xl">MARCO HUWIG - WEB DEVELOPMENT</h1>
+          <h1 className="glitch font-bold text-5xl">MARCO HUWIG</h1>
+          <h2 className="glitch font-bold text-3xl">WEB DEVELOPMENT</h2>
         </div>
 
         {/* Loading Spinner */}
