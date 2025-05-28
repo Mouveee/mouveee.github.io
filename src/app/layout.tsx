@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import React from "react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['100', '200'], // or other weights like '100', '300', etc.
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: "Marco Huwig – Webentwickler Fokus auf Frontend",
@@ -26,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${roboto.className} ${roboto.className} antialiased`}
       >
         {children}
       </body>
