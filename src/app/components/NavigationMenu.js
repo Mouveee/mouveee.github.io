@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { AlignJustify } from 'lucide-react';
+import { AlignJustify } from "lucide-react";
 
 const NavigationMenu = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -17,17 +17,17 @@ const NavigationMenu = () => {
   return (
     <div className="relative">
       <div
-        className="fixed h-10 w-10 flex items-center justify-center top-10 right-8 cursor-pointer z-50"
+        className="fixed h-4 w-4 flex items-center justify-center top-10 right-4 cursor-pointer z-50"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <AlignJustify className="w-20 h-20" color="#D8D1B1"/>
+        <AlignJustify className="w-20 h-20" color="#D8D1B1" />
       </div>
 
       {/* Menu Container */}
       <nav
-        className={`fixed top-10 right-8 p-4 bg-black  rounded-lg shadow-lg transition-transform transform duration-300 ease-in-out z-50 ${
-          isHovered ? "scale-100 opacity-100" : "scale-0 opacity-0"
+        className={`fixed top-0 right-0 p-4 bg-black h-screen w-64 rounded-l-lg shadow-lg transition-transform duration-300 ease-in-out z-50 border-l-4 border-pink-500 ${
+          isHovered ? "translate-x-0" : "translate-x-full"
         }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
