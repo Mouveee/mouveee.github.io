@@ -178,7 +178,8 @@ export default function Home() {
 
   useEffect(() => {
     setRows(isMobile ? 6 : 3)
-    setColumns(isMobile ? 3 : 6)
+    setColumns(isMobile ? 2 : 6)
+    setNumPieces(isMobile ? 12 : 18)
   }, [isMobile])
 
 
