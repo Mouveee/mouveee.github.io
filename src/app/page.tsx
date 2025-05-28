@@ -182,6 +182,19 @@ export default function Home() {
     setNumPieces(isMobile ? 12 : 18)
   }, [isMobile])
 
+  useEffect(() => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    setScreenWidth(width);
+    setScreenHeight(height);
+
+    setIsMobile(window.innerWidth <= 768);
+
+    INNER_WIDTH = width * 10 / 12;
+    INNER_HEIGHT = height * 10 / 12;
+  }, [])
+
 
   const handleVideoLoad = () => {
     setIsVideoLoaded(true);
