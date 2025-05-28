@@ -35,9 +35,9 @@ export default function Skills() {
         , []);
 
     return (
-        <div className="relative min-h-screen text-center flex flex-col items-center justify-center px-8 overflow-hidden p-10">
+        <div className="relative min-h-screen flex flex-col items-center justify-center px-8 overflow-hidden p-10">
             <div className="absolute inset-0 bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove z-0"></div>
-            <h1 className="text-5xl font-bold tracking-wide uppercase text-center z-10">
+            <h1 className="text-5xl font-bold tracking-wide uppercase z-10">
                 Skills & Erfahrung
             </h1>
 
