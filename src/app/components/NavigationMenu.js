@@ -17,7 +17,7 @@ const NavigationMenu = () => {
   return (
     <div className="relative">
       <div
-        className="fixed h-4 w-4 flex items-center justify-center top-10 right-4 cursor-pointer z-50"
+        className="fixed h-6 w-6 flex items-center justify-center top-4 right-4 cursor-pointer z-50"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -26,13 +26,13 @@ const NavigationMenu = () => {
 
       {/* Menu Container */}
       <nav
-        className={`fixed top-0 right-0 p-4 bg-black h-screen w-64 rounded-l-lg shadow-lg transition-transform duration-300 ease-in-out z-50 border-l-4 border-pink-500 ${
+        className={`fixed top-0 right-0 p-8 bg-black h-screen w-64 rounded-l-lg shadow-lg transition-transform duration-300 ease-in-out z-50 border-pink-500 border-1 ${
           isHovered ? "translate-x-0" : "translate-x-full"
         }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <ul className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-4 text-right">
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
               currentPath === "/intro" ? "hidden" : ""
