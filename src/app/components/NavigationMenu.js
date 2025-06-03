@@ -17,11 +17,11 @@ const NavigationMenu = () => {
   return (
     <div className="relative">
       <div
-        className="fixed h-6 w-6 flex items-center justify-center top-4 right-4 cursor-pointer z-50"
+        className="fixed h-20 w-20 flex items-start justify-center top-4 right-4 cursor-pointer z-50"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <AlignJustify className="w-20 h-20" color="#D8D1B1" />
+        <AlignJustify className="w-8 h-8" color="#D8D1B1" />
       </div>
 
       {/* Menu Container */}
