@@ -17,7 +17,7 @@ const NavigationMenu = () => {
   return (
     <div className="relative">
       <div
-        className="fixed h-20 w-20 flex items-start justify-center top-4 right-4 cursor-pointer z-50"
+        className="fixed h-20 w-20 flex items-start justify-end top-4 right-4 cursor-pointer z-50"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
