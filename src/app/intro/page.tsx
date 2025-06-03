@@ -23,7 +23,7 @@ export default function IntroSection() {
   }, []);
 
   return (
-    <section className="py-16 px-6 md:px-12 h-screen z-10  bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove">
+    <div className="py-16 px-6 md:px-12 h-screen z-10  bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove">
       <div className="max-w-4xl mx-auto m-auto py-6 px-4 bg-black hover:bg-gray-800 transition-all duration-300 rounded-md z-10 shadow-lg border border-gray-800 opacity-90">
         <h1 className="text-3xl font-semibold mb-4 text-pink-500 fade-in uppercase">
           Marco Huwig – Webentwickler
@@ -41,6 +41,6 @@ export default function IntroSection() {
 
       <Dots numberOfDots={20} />
       <NavigationMenu />
-    </section>
+    </div>
   );
 };
