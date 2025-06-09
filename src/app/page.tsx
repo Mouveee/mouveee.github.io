@@ -3,9 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NavigationMenu from './components/NavigationMenu';
 
-let INNER_WIDTH = 1280;
-let INNER_HEIGHT = 768;
-
 interface CanvasStyle {
   width: number;
   height: number;
@@ -35,6 +32,8 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [screenWidth, setScreenWidth] = useState<number>(1280);
   const [screenHeight, setScreenHeight] = useState<number>(768);
+  const [innerWidth, setInnerWidth] = useState(1280);
+  const [innerHeight, setInnerHeight] = useState(768);
   const [rows, setRows] = useState<number>(3);
   const [columns, setColumns] = useState<number>(6);
   const [numPieces, setNumPieces] = useState<number>(18);
@@ -44,7 +43,23 @@ export default function Home() {
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
 
+  const updateDimensions = (width:number, height:number) => {
+    console.log('Updating dimensions', `${width} ${height}`)
+    setScreenWidth(width);
+    setScreenHeight(height);
+
+    setIsMobile(window.innerWidth <= 768);
+
+    setInnerWidth(width * 10 / 12);
+    setInnerHeight(height * 12 / 10);
+  }
+
   useEffect(() => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    updateDimensions(width, height);
+
     const handleScroll = async (event: WheelEvent) => {
       if (event.deltaY > 0 && homescreenRef.current) {
         linkRef.current?.click();
@@ -56,13 +71,7 @@ export default function Home() {
       const width = window.innerWidth;
       const height = window.innerHeight;
 
-      setScreenWidth(width);
-      setScreenHeight(height);
-
-      setIsMobile(window.innerWidth <= 768);
-
-      INNER_WIDTH = width * 10 / 12;
-      INNER_HEIGHT = height * 10 / 12;
+      updateDimensions(width, height);
     }
 
     window.addEventListener("wheel", handleScroll);
@@ -76,26 +85,16 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (!isVideoLoaded || !window) {
+    if (!isVideoLoaded) {
       return;
     }
-
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    setScreenWidth(width);
-    setScreenHeight(height);
-
-    setIsMobile(window.innerWidth <= 768);
-
-    INNER_WIDTH = width * 10 / 12;
-    INNER_HEIGHT = height * 10 / 12;
 
     const styles = Array.from({ length: numPieces }).map((_, index) => {
       const row = Math.floor(index / columns);
       const col = index % columns;
-      const baseWidth = INNER_WIDTH / columns;
-      const baseHeight = INNER_HEIGHT / rows;
+      const baseWidth = innerWidth / columns;
+      const baseHeight = innerHeight / rows;
+      console.log('in loop')
 
       return {
         width: baseWidth,
@@ -170,31 +169,17 @@ export default function Home() {
 
     return () => {
       if (video) {
-        video.addEventListener('play', handleVideoPlay);
+        video.removeEventListener('play', handleVideoPlay);
         video.removeEventListener('playing', handleVideoPlay);
       }
     };
-  }, [isVideoLoaded, screenWidth, screenHeight]);
+  }, [isVideoLoaded]);
 
   useEffect(() => {
     setRows(isMobile ? 6 : 3)
     setColumns(isMobile ? 2 : 6)
     setNumPieces(isMobile ? 12 : 18)
   }, [isMobile])
-
-  useEffect(() => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    setScreenWidth(width);
-    setScreenHeight(height);
-
-    setIsMobile(window.innerWidth <= 768);
-
-    INNER_WIDTH = width * 10 / 12;
-    INNER_HEIGHT = height * 10 / 12;
-  }, [])
-
 
   const handleVideoLoad = () => {
     setIsVideoLoaded(true);
@@ -228,7 +213,7 @@ export default function Home() {
       >
         {/* Text Overlay */}
         <div
-          className="fixed text-left top-10 left-8  text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
+          className="fixed text-left top-4 left-4 text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
           style={{ opacity: isTextVisible ? 1 : 0 }}
         >
           <h1 className="glitch font-bold text-5xl">MARCO HUWIG</h1>
