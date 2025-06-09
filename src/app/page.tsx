@@ -41,18 +41,50 @@ export default function Home() {
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
 
-  const updateDimensions = (width:number, height:number) => {
-    console.log('Updating dimensions', `${width} ${height}`)
+  const updateDimensions = (width: number, height: number) => {
     setIsMobile(window.innerWidth <= 768);
 
     setInnerWidth(width * 10 / 12);
     setInnerHeight(height * 10 / 12);
   }
 
+  const updateCanvasStyles = () => {
+    console.log('update cnavas', `${innerWidth} ${innerHeight}`)
+    const styles = Array.from({ length: numPieces }).map((_, index) => {
+      const row = Math.floor(index / columns);
+      const col = index % columns;
+      const baseWidth = innerWidth / columns;
+      const baseHeight = innerHeight / rows;
+
+      return {
+        width: baseWidth,
+        height: baseHeight,
+        margin: 1,
+        padding: 1,
+        opacity: 0.7 + Math.random() * 0.1,
+        left: col * baseWidth,
+        top: row * baseHeight,
+        randomOffset: {
+          width: Math.random() * 3,
+          height: Math.random() * 3,
+          margin: Math.random() * 2,
+          padding: Math.random() * 2,
+          x: Math.random() * 2,
+        },
+        animation: {
+          duration: 1 + Math.random() * 2,
+          delay: Math.random() * 2,
+        }
+      };
+    });
+
+    setCanvasStyles(styles);
+  }
+
   useEffect(() => {
     const width = window.innerWidth;
     const height = window.innerHeight;
-
+    
     updateDimensions(width, height);
 
     const handleScroll = async (event: WheelEvent) => {
@@ -83,37 +115,6 @@ export default function Home() {
     if (!isVideoLoaded) {
       return;
     }
-
-    const styles = Array.from({ length: numPieces }).map((_, index) => {
-      const row = Math.floor(index / columns);
-      const col = index % columns;
-      const baseWidth = innerWidth / columns;
-      const baseHeight = innerHeight / rows;
-      console.log('in loop')
-
-      return {
-        width: baseWidth,
-        height: baseHeight,
-        margin: 1,
-        padding: 1,
-        opacity: 0.7 + Math.random() * 0.1,
-        left: col * baseWidth,
-        top: row * baseHeight,
-        randomOffset: {
-          width: Math.random() * 3,
-          height: Math.random() * 3,
-          margin: Math.random() * 2,
-          padding: Math.random() * 2,
-          x: Math.random() * 2,
-        },
-        animation: {
-          duration: 1 + Math.random() * 2,
-          delay: Math.random() * 2,
-        }
-      };
-    });
-
-    setCanvasStyles(styles);
 
     setTimeout(() => {
       setIsTextVisible(true);
@@ -175,6 +176,10 @@ export default function Home() {
     setColumns(isMobile ? 2 : 6)
     setNumPieces(isMobile ? 12 : 18)
   }, [isMobile])
+
+  useEffect(() => {
+    updateCanvasStyles();
+  }, [innerWidth, innerHeight])
 
   const handleVideoLoad = () => {
     setIsVideoLoaded(true);
