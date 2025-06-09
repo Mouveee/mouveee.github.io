@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import NavigationMenu from './components/NavigationMenu';
 
 interface CanvasStyle {
@@ -40,6 +40,15 @@ export default function Home() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
+  const rowsRef = useRef(rows);
+  const columnsRef = useRef(columns);
+  const canvasRef = useRef(canvasStyles);
+
+  useEffect(() => {
+    if (rows !== rowsRef.current) rowsRef.current = rows;
+    if (columns !== columnsRef.current) columnsRef.current = columns;
+    if (canvasStyles !== canvasRef.current) canvasRef.current = canvasStyles;
+  }, [rows, columns, canvasStyles])
 
   const updateDimensions = (width: number, height: number) => {
     setIsMobile(window.innerWidth <= 768);
@@ -48,7 +57,11 @@ export default function Home() {
     setInnerHeight(height * 10 / 12);
   }
 
-  const updateCanvasStyles = () => {
+  useEffect(() => {
+
+  }, [rows, columns])
+
+  const updateCanvasStyles = useCallback(() => {
     console.log('update cnavas', `${innerWidth} ${innerHeight}`)
     const styles = Array.from({ length: numPieces }).map((_, index) => {
       const row = Math.floor(index / columns);
@@ -79,7 +92,7 @@ export default function Home() {
     });
 
     setCanvasStyles(styles);
-  }
+  }, [columns, innerHeight, innerWidth, numPieces, rows])
 
   useEffect(() => {
     const width = window.innerWidth;
@@ -129,14 +142,14 @@ export default function Home() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        const style = canvasStyles[index];
+        const style = canvasRef.current[index];
         if (!style) return;
 
-        const row = Math.floor(index / columns);
-        const col = index % columns;
+        const row = Math.floor(index / columnsRef.current);
+        const col = index % columnsRef.current;
 
-        const sourceWidth = (video.videoWidth / columns);
-        const sourceHeight = (video.videoHeight / rows);
+        const sourceWidth = (video.videoWidth / columnsRef.current);
+        const sourceHeight = (video.videoHeight / rowsRef.current);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -179,7 +192,7 @@ export default function Home() {
 
   useEffect(() => {
     updateCanvasStyles();
-  }, [innerWidth, innerHeight])
+  }, [innerWidth, innerHeight, updateCanvasStyles])
 
   const handleVideoLoad = () => {
     setIsVideoLoaded(true);
@@ -216,8 +229,8 @@ export default function Home() {
           className="fixed text-left top-10 left-4 text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
           style={{ opacity: isTextVisible ? 1 : 0 }}
         >
-          <h1 className="glitch font-bold text-5xl">MARCO HUWIG</h1>
-          <h2 className="glitch font-bold text-3xl">WEB DEVELOPMENT</h2>
+          <h1 className="glitch font-bold text-6xl">MARCO HUWIG</h1>
+          <h2 className="glitch font-bold text-4xl">WEB DEVELOPMENT</h2>
         </div>
 
         {/* Loading Spinner */}
