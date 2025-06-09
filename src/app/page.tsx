@@ -30,8 +30,6 @@ export default function Home() {
   const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
   const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [screenWidth, setScreenWidth] = useState<number>(1280);
-  const [screenHeight, setScreenHeight] = useState<number>(768);
   const [innerWidth, setInnerWidth] = useState(1280);
   const [innerHeight, setInnerHeight] = useState(768);
   const [rows, setRows] = useState<number>(3);
@@ -45,13 +43,10 @@ export default function Home() {
 
   const updateDimensions = (width:number, height:number) => {
     console.log('Updating dimensions', `${width} ${height}`)
-    setScreenWidth(width);
-    setScreenHeight(height);
-
     setIsMobile(window.innerWidth <= 768);
 
     setInnerWidth(width * 10 / 12);
-    setInnerHeight(height * 12 / 10);
+    setInnerHeight(height * 10 / 12);
   }
 
   useEffect(() => {
