@@ -8,7 +8,7 @@ const interests = [
     category: "Literature",
     items: [
       "Haruki Murakami",
-      "The Great Gatsby",
+      "Cormac McCarthy",
       "Raymond Chandler",
     ]
   },
@@ -31,7 +31,7 @@ const interests = [
   {
     category: "Sonstiges",
     items: [
-      "Ableton Live - Ich mache gerne Sounds und Musik",
+      "Ableton Live, Gitarren - Ich mache gerne Sounds und Musik",
       "Die Zelda Reihe",
       "Junji Ito"
     ]
