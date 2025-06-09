@@ -62,7 +62,6 @@ export default function Home() {
   }, [rows, columns])
 
   const updateCanvasStyles = useCallback(() => {
-    console.log('update cnavas', `${innerWidth} ${innerHeight}`)
     const styles = Array.from({ length: numPieces }).map((_, index) => {
       const row = Math.floor(index / columns);
       const col = index % columns;
