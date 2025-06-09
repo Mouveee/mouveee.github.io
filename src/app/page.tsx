@@ -213,7 +213,7 @@ export default function Home() {
       >
         {/* Text Overlay */}
         <div
-          className="fixed text-left top-4 left-4 text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
+          className="fixed text-left top-10 left-4 text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
           style={{ opacity: isTextVisible ? 1 : 0 }}
         >
           <h1 className="glitch font-bold text-5xl">MARCO HUWIG</h1>
