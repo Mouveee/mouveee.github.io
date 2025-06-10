@@ -50,7 +50,7 @@ export default function Skills() {
                     >
                         <h2 className="text-3xl font-bold mb-4 z-50">{category.name}</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                            {skills.filter(skill => skill.category_id === category.id).map((skill, index) => (
+                            {skills?.filter(skill => skill.category_id === category.id).map((skill, index) => (
                                 <div key={index} className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">
                                     <div className="tile-inner relative w-full h-full transform-style-preserve-3d text- bg-[#0d0d0d]">
                                         <div className="tile-front bg-gray-800 text-white p-4 rounded-lg shadow-lg flex items-center justify-center h-full flex-col">
