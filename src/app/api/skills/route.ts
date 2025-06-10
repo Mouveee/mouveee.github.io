@@ -29,13 +29,13 @@ export async function GET() {
     const skills = await sql`SELECT * FROM skills ORDER BY id`;
     const categories = await sql`SELECT * FROM categories ORDER BY id`;
 
-    categories.forEach((category) => {
-      category.skills = skills.filter(
-        (skill) => skill.category_id === category.id
-      );
-    });
-
-    return NextResponse.json(categories, { status: 200 });
+    return NextResponse.json(
+      {
+        categories: categories,
+        skills: skills,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Database error:", error);
     return NextResponse.json(
@@ -48,29 +48,44 @@ export async function GET() {
 export async function POST(data: NextRequest) {
   try {
     const body = await data.json();
+    console.log(JSON.stringify(body, null, 2));
 
     await Promise.all(
-      body.map(async (category: Category) => {
+      body.categories.map(async (category: Category) => {
         await sql`
           UPDATE categories
           SET name = ${category.name}
           WHERE id = ${category.id}`;
+      })
+    );
 
-        await Promise.all(
-          category.skills.map(async (skill: SkillItem) => {
-            await sql`
+    await Promise.all(
+      body.skills.map(async (skill: SkillItem) => {
+        await sql`
               INSERT INTO skills (id, category_id, key, label, description, icon)
               VALUES (${skill.id}, ${skill.category_id}, ${skill.key}, ${skill.label}, ${skill.description}, ${skill.icon})
               ON CONFLICT (id) 
               DO UPDATE SET
                   category_id = EXCLUDED.category_id,
-                  key = EXCLUDED.key,
                   label = EXCLUDED.label,
                   description = EXCLUDED.description,
                   icon = EXCLUDED.icon;
-            `;    
-          })
-        );
+            `;
+      })
+    );
+    
+    await Promise.all(
+      body.skills.map(async (skill: SkillItem) => {
+        await sql`
+              INSERT INTO skills (id, category_id, key, label, description, icon)
+              VALUES (${skill.id}, ${skill.category_id}, ${skill.key}, ${skill.label}, ${skill.description}, ${skill.icon})
+              ON CONFLICT (id) 
+              DO UPDATE SET
+                  category_id = EXCLUDED.category_id,
+                  label = EXCLUDED.label,
+                  description = EXCLUDED.description,
+                  icon = EXCLUDED.icon;
+            `;
       })
     );
 
@@ -80,4 +95,3 @@ export async function POST(data: NextRequest) {
     return NextResponse.json({ error: "Failed: " + error }, { status: 500 });
   }
 }
-

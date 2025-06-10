@@ -4,22 +4,23 @@ import React, { useEffect, useState } from "react";
 import NavigationMenu from "@/app/components/NavigationMenu";
 import Dots from "@/app/components/Dots";
 
-interface Skills {
+interface Category {
     name: string;
-    label: string;
-    skills: SkillItem[];
+    id: number;
 }
 
-interface SkillItem {
+interface Skill {
     name: string;
     label: string;
     description: string;
     icon: string;
+    category_id: number;
 }
 
 
 export default function Skills() {
-    const [skills, setskills] = useState<Skills[] | null>(null);
+    const [skills, setskills] = useState<Skill[] | null>(null);
+    const [categories, setCategories] = useState<Category[] | null>(null);
 
     useEffect(() => {
         const fetchSkills = async () => {
@@ -28,11 +29,12 @@ export default function Skills() {
                 throw new Error("Failed to fetch data");
             }
             const data = await response.json();
-            setskills(data);
+            setskills(data.skills);
+            setCategories(data.categories);
         };
+
         fetchSkills();
-    }
-        , []);
+    }, []);
 
     return (
         <div className="relative min-h-screen flex flex-col items-center justify-center px-8 overflow-hidden p-10">
@@ -42,13 +44,13 @@ export default function Skills() {
             </h1>
 
             <div className="mt-12 space-y-8 w-full max-w-4xl z-50 text-center">
-                {skills && skills.map((category, index) => (
+                {categories && categories.map((category, index) => (
                     <div
                         key={index}
                     >
                         <h2 className="text-3xl font-bold mb-4 z-50">{category.name}</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                            {skills[index].skills.map((skill, index) => (
+                            {skills.filter(skill => skill.category_id === category.id).map((skill, index) => (
                                 <div key={index} className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">
                                     <div className="tile-inner relative w-full h-full transform-style-preserve-3d text- bg-[#0d0d0d]">
                                         <div className="tile-front bg-gray-800 text-white p-4 rounded-lg shadow-lg flex items-center justify-center h-full flex-col">
