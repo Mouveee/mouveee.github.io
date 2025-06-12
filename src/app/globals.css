@@ -20,6 +20,13 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+input, textarea {
+  color: black;
+  border: 1px solid #333333;
+  border-radius: 8px;
+  padding: 8px;
+}
+
 @keyframes flicker {
   0% { opacity: 0.9; }
   50% { opacity: 1; }
@@ -29,7 +36,7 @@ body {
   animation: flicker 0.15s infinite alternate delay(5s);
 }
 
-@keyframes spin {
+@keyframes subtle-rotate-y {
   from {
     transform: rotateY(0deg);
   }
@@ -73,7 +80,7 @@ body {
 }
 
 /* For Firefox */
-/* * {
+* {
   scrollbar-width: thin;
   scrollbar-color: rgb(236 72 153) #333333;
-} */
+}

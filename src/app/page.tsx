@@ -96,7 +96,7 @@ export default function Home() {
   useEffect(() => {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    
+
     updateDimensions(width, height);
 
     const handleScroll = async (event: WheelEvent) => {
@@ -207,7 +207,7 @@ export default function Home() {
       padding: `${style.padding + style.randomOffset.padding}px`,
       opacity: isVideoLoaded ? style.opacity : 0,
       transition: "opacity 3s",
-      animation: `spin ${style.animation.duration}s linear infinite alternate`,
+      animation: `subtle-rotate-y ${style.animation.duration}s linear infinite alternate`,
       animationDelay: `${style.animation.delay}s`,
       width: `${style.width + style.randomOffset.width}px`,
       height: `${style.height + style.randomOffset.height}px`,
@@ -235,7 +235,7 @@ export default function Home() {
         {/* Loading Spinner */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="border-t-4 border-b-4 border-white w-12 h-12 rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
           </div>
         )}
 
