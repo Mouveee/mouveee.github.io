@@ -260,7 +260,9 @@ export default function Home() {
       </div>
 
       {/* Navigation Menu */}
-      <NavigationMenu />
+      {!isLoading && (
+        <NavigationMenu />
+      )}
 
       {/* Hidden Video */}
       <video
