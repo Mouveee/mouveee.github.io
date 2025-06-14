@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { CirclePlus, Check } from "lucide-react";
+import { signOut } from "next-auth/react"
 
 interface Category {
     id: number;
@@ -111,6 +112,7 @@ export default function AdminClient() {
 
     return (
         <div className="relative flex flex-col items-start justify-rcente px-8 overflow-hidden p-10">
+            <button onClick={() => signOut({ callbackUrl: '/' })}>Sign out</button>
             <form
                 className="relative flex flex-col items-start justify-center px-8 overflow-hidden p-10"
                 onSubmit={handleSubmit}
