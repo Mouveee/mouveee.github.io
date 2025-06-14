@@ -174,23 +174,9 @@ export default function AdminClient() {
                                     ))
                                 }
 
-                                {/* <CirclePlus className="cursor-pointer" onClick={() => {
-                                    const updatedSkills = [...skills!];
-                                    alert(index)
-
-                                    if (updatedSkills.length > 0) {
-                                        updatedSkills[index + 1].skills.push({
-                                            id: lastId + 1,
-                                            label: "",
-                                            key: "231123231",
-                                            category_id: index,
-                                            description: "",
-                                            icon: "",
-                                        });
-                                    }
-
-                                    setUpdates(updatedSkills);
-                                }} /> */}
+                                <CirclePlus className="cursor-pointer" onClick={() => {
+                                    alert('in progress')
+                                }} />
                             </div>
                         </div>
                     ))
