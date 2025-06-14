@@ -250,7 +250,7 @@ export default function Home() {
               height={style.height + style.randomOffset.height}
             ></canvas>
 
-            <div className="absolute inset-0 bg-pink-800 pointer-events-none flicker"
+            <div className="absolute inset-0 bg-pink-500 pointer-events-none flicker"
               style={{ ...getCanvasStyle(style), opacity: 0.02 + Math.random() * 0.1, zIndex: 10, filter: "none" }}
             >
             </div>
