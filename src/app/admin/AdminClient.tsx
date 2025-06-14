@@ -24,7 +24,7 @@ interface Update {
 }
 
 
-export default function AdminClient({session}) {
+export default function AdminClient() {
     const [categories, setCategories] = useState<Category[] | []>([])
     const [skills, setSkills] = useState<Skill[] | []>([]);
 
