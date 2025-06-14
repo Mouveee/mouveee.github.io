@@ -9,6 +9,7 @@ export default function SignIn() {
   const handleSignIn = async () => {
     const result = await signIn("google", {
       redirect: false,
+      callbackUrl: "/admin",
     })
 
     if (result?.ok) {
