@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from '../../auth';
 import postgres from "postgres";
 
 interface Category {
@@ -48,7 +49,10 @@ export async function GET() {
 export async function POST(data: NextRequest) {
   try {
     const body = await data.json();
-    console.log(JSON.stringify(body, null, 2));
+    const session = await auth();
+
+    if (!session || session?.user?.email !== "huwig.marco@gmail.com") 
+      return NextResponse.json({ error: "Unauthenticated" }, { status: 403 });
 
     await Promise.all(
       body.categories.map(async (category: Category) => {
