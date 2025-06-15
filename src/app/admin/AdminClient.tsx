@@ -116,7 +116,7 @@ export default function AdminClient() {
     return (
         <div className="relative flex flex-col items-start justify-rcente px-8 overflow-hidden p-10">
             <button onClick={() => signOut({ callbackUrl: '/signin' })}>Sign out</button>
-            <button onClick={() => toast("This is a test toast!")}>Show Toast</button>
+
             <form
                 className="relative flex flex-col items-start justify-center px-8 overflow-hidden p-10"
                 onSubmit={handleSubmit}
