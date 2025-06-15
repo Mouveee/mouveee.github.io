@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { CirclePlus, Check } from "lucide-react";
 import { signOut } from "next-auth/react"
+import { ToastContainer, toast } from "react-toastify"
 
 interface Category {
     id: number;
@@ -97,8 +98,10 @@ export default function AdminClient() {
             })
             .then((data) => {
                 console.log("Data saved successfully:", JSON.stringify(data, null, 2));
+                toast('Succes')
             })
             .catch((error) => {
+                toast('Something went wrong')
                 console.error("Error saving data:", error);
             });
     }
@@ -113,6 +116,7 @@ export default function AdminClient() {
     return (
         <div className="relative flex flex-col items-start justify-rcente px-8 overflow-hidden p-10">
             <button onClick={() => signOut({ callbackUrl: '/' })}>Sign out</button>
+            <button onClick={() => toast("This is a test toast!")}>Show Toast</button>
             <form
                 className="relative flex flex-col items-start justify-center px-8 overflow-hidden p-10"
                 onSubmit={handleSubmit}
@@ -167,8 +171,7 @@ export default function AdminClient() {
                                                     const updatedSkills = [...skills!];
                                                     updatedSkills[skillIndex].modified = true;
                                                     setSkills(updatedSkills);
-                                                    const result = postData({ skills: [skill], categories: [] });
-                                                    console.log(JSON.stringify(result))
+                                                    postData({ skills: [skill], categories: [] });
                                                 }
                                                 }></Check> : null}
 
@@ -185,6 +188,7 @@ export default function AdminClient() {
                 }
                 <button type="submit" className="bg-pink-500 text-white px-4 py-2 rounded">Save</button>
             </form >
+            <ToastContainer></ToastContainer>
         </div >
     )
 }
