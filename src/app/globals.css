@@ -41,7 +41,7 @@ input, textarea {
     transform: rotateY(0deg);
   }
   to {
-    transform: rotateY(26deg);
+    transform: rotateY(18deg);
   }
 }
 
