@@ -291,8 +291,8 @@ useEffect(() => {
             className="absolute inset-0 flex flex-col justify-end items-center text-center px-4 mb-10 bg-black rounded-md h-fit w-fit md:hidden top-[80%] bg-opacity-60 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-800"
             style={{ opacity: isTextVisible ? 1 : 0 }}
           >
-            <h1 className="glitch font-bold text-3xl uppercase tracking-widest mb-2">MARCO HUWIG</h1>
-            <h2 className="glitch font-bold text-xl uppercase tracking-widest">WEBENTWICKLUNG</h2>
+            <h1 className="glitch font-bold text-4xl uppercase tracking-widest mb-2">MARCO HUWIG</h1>
+            <h2 className="glitch font-bold text-1xl uppercase tracking-widest">WEBENTWICKLUNG</h2>
           </div>
         </div>
 
