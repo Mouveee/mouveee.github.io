@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import NavigationMenu from './components/NavigationMenu';
+import Dots from './components/Dots';
 
 interface CanvasStyle {
   width: number;
@@ -53,8 +54,8 @@ export default function Home() {
   const updateDimensions = (width: number, height: number) => {
     setIsMobile(window.innerWidth <= 768);
 
-    setInnerWidth(width * 10 / 12);
-    setInnerHeight(height * 10 / 12);
+    setInnerWidth(width);
+    setInnerHeight(height);
   }
 
   useEffect(() => {
@@ -212,51 +213,68 @@ export default function Home() {
       width: `${style.width + style.randomOffset.width}px`,
       height: `${style.height + style.randomOffset.height}px`,
       mixBlendMode: "screen" as const,
-      borderRadius: "12px",
       filter: "blur(1px) contrast(1.1) grayscale(2) hue-rotate(0deg) saturate(0.1)",
     };
   };
 
   return (
     <div
-      className={`relative m-auto homescreen min-h-screen h-[100vh] overflow-y-clip flex items-center justify-center bg-black`}>
-      <div
-        className="relative m-auto overflow-y-clip w-10/12 h-[83.3%] items-center justify-center"
-      >
-        {/* Text Overlay */}
-        <div
-          className="fixed text-left top-10 left-4 text-4xl font-bold uppercase tracking-widest transition-opacity duration-5000 ease-in-out"
-          style={{ opacity: isTextVisible ? 1 : 0 }}
-        >
-          <h1 className="glitch font-bold text-6xl">MARCO HUWIG</h1>
-          <h2 className="glitch font-bold text-4xl">WEB DEVELOPMENT</h2>
-        </div>
+      className={`relative m-auto homescreen min-h-screen h-[100vh] overflow-y-clip flex justify-center bg-black bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove z-0`}>
 
+      <Dots numberOfDots={13}></Dots>
+
+      <div
+        className={`relative flex flex-row overflow-y-clip w-[100vw] h-[100vh] justify-evenly bg-black bg-opacity-80`}
+      >
         {/* Loading Spinner */}
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="absolute inset-0 flex items-center justify-center bg-opacity-50">
             <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
           </div>
         )}
 
-        {/* Render Canvas Grid */}
-        {canvasStyles.map((style, index) => (
-          <div className="absolute" key={index}>
-            <canvas
-              ref={(el) => { canvasRefs.current[index] = el; }}
-              className="absolute flicker inset-0 grayscale"
-              style={getCanvasStyle(style)}
-              width={style.width + style.randomOffset.width}
-              height={style.height + style.randomOffset.height}
-            ></canvas>
+        {/* Canvas Section - LEFT */}
+        <div className="relative w-1/2 h-full">
+          {canvasStyles.map((style, index) => {
+            const cols = 6;
+            const row = Math.floor(index / cols);
+            const col = index % cols;
 
-            <div className="absolute inset-0 bg-pink-500 pointer-events-none flicker"
-              style={{ ...getCanvasStyle(style), opacity: 0.02 + Math.random() * 0.1, zIndex: 10, filter: "none" }}
-            >
-            </div>
-          </div>
+            if (col >= 3 || row >= 3) return null;
 
-        ))}
+            return (
+              <div className="absolute bg-black" key={index}>
+                <canvas
+                  ref={(el) => { canvasRefs.current[index] = el; }}
+                  className="absolute flicker inset-0 grayscale"
+                  style={getCanvasStyle(style)}
+                  width={style.width + style.randomOffset.width}
+                  height={style.height + style.randomOffset.height}
+                ></canvas>
+
+                <div
+                  className="absolute inset-0 bg-pink-500 pointer-events-none flicker"
+                  style={{
+                    ...getCanvasStyle(style),
+                    opacity: 0.02 + Math.random() * 0.1,
+                    zIndex: 10,
+                    filter: "none"
+                  }}
+                ></div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Text Section - RIGHT */}
+        <div
+          className="w-1/2 h-full flex flex-col justify-start px-8 text-left transition-opacity duration-5000 ease-in-out mt-10"
+          style={{ opacity: isTextVisible ? 1 : 0 }}
+        >
+          <h1 className="glitch font-bold text-6xl uppercase tracking-widest">MARCO HUWIG</h1>
+          <h2 className="glitch font-bold text-3xl uppercase tracking-widest">WEBENTWICKLER</h2>
+          <h2 className="glitch font-bold text-3xl uppercase tracking-widest">SAARBRÜCKEN</h2>
+        </div>
       </div>
 
       {/* Navigation Menu */}
@@ -275,7 +293,7 @@ export default function Home() {
         muted
         onLoadedData={handleVideoLoad}
       />
-
     </div>
+
   );
 }
