@@ -29,13 +29,22 @@ export default function IntroSection() {
           Marco Huwig – Webentwickler
         </h1>
         <p className="text-lg mb-6 fade-in">
-          In den letzten vier Jahren habe ich als Full-Stack-Entwickler bei Neocosmo eine Vielzahl an Webprojekten erfolgreich realisiert. Besonders begeistert mich das Frontend – die Schnittstelle zwischen technischer Umsetzung und herausragendem Nutzererlebnis. Aus diesem Grund möchte ich mich verstärkt auf den Bereich Frontend-Entwicklung konzentrieren.
+          Hallo, mein Name ist Marco Huwig, ich lebe in Saarbrücken und bin ausgebildeter Webentwickler.
         </p>
         <p className="text-lg mb-6 fade-in">
-          Ich arbeite mit modernen Technologien wie React, NextJS und Vue und lege großen Wert auf sauberen, wartbaren Code, Performance und eine durchdachte User Experience. Mein Ansatz: Probleme strukturiert analysieren, elegante Lösungen finden und Anwendungen gestalten, die nicht nur funktionieren, sondern auch intuitiv bedienbar und ansprechend sind.
+          In den letzten vier Jahren habe ich als Full-Stack-Entwickler bei Neocosmo eine Vielzahl an Webprojekten erfolgreich 
+          realisiert. Dazu zählt die Entwicklung von Frontend Komponenten, das Entwickeln und Integrieren von REST APIs,  
+          sowie die Wartung und Support für bestehende Funktionalitäten. 
+        </p>
+        <p className="text-lg mb-6 fade-in">
+          Ich arbeite mit modernen Technologien wie React, NextJS und Vue und lege großen Wert auf sauberen, 
+          wartbaren Code, Performance und eine durchdachte User Experience. Mein Ansatz: Probleme strukturiert analysieren, 
+          elegante Lösungen finden und Anwendungen gestalten, die nicht nur funktionieren, sondern auch intuitiv bedienbar 
+          und ansprechend sind.
         </p>
         <p className="text-lg fade-in">
-        Ich suche eine neue Herausforderung, bei der ich digitale Produkte mit echtem Mehrwert gestalten und meine Leidenschaft für nutzerzentriertes Design voll einbringen kann.
+          Ich suche eine neue Herausforderung, bei der ich digitale Produkte gestalten 
+          und meine Leidenschaft für nutzerzentriertes Design voll einbringen kann.
         </p>
       </div>
 
