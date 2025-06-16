@@ -234,7 +234,7 @@ export default function Home() {
     )}
 
     {/* Canvas Section */}
-    <div className="relative w-full md:w-1/2 h-full">
+    <div className="relative w-full md:w-1/2 h-full bg-black">
       {canvasStyles.map((style, index) => {
         const row = Math.floor(index / columns);
         const col = index % columns;
@@ -266,23 +266,21 @@ export default function Home() {
 
       {/* Text over canvas on mobile */}
       <div
-        className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 bottom-2 md:hidden -mb-4"
+        className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 bottom-2 md:hidden"
         style={{ opacity: isTextVisible ? 1 : 0 }}
       >
         <h1 className="glitch font-bold text-4xl uppercase tracking-widest mb-2">MARCO HUWIG</h1>
         <h2 className="glitch font-bold text-xl uppercase tracking-widest">WEBENTWICKLER</h2>
-        <h2 className="glitch font-bold text-xl uppercase tracking-widest">SAARBRÜCKEN</h2>
       </div>
     </div>
 
     {/* Text Section - desktop only */}
     <div
-      className="hidden md:flex w-1/2 h-full flex-col justify-center px-8 text-left transition-opacity duration-5000 ease-in-out mt-10"
+      className="hidden md:flex w-1/2 h-full flex-col justify-center px-8 text-left transition-opacity duration-5000 ease-in-out"
       style={{ opacity: isTextVisible ? 1 : 0 }}
     >
       <h1 className="glitch font-bold text-6xl uppercase tracking-widest mb-4">MARCO HUWIG</h1>
       <h2 className="glitch font-bold text-3xl uppercase tracking-widest">WEBENTWICKLER</h2>
-      <h2 className="glitch font-bold text-2xl uppercase tracking-widest">SAARBRÜCKEN</h2>
     </div>
   </div>
 
