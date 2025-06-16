@@ -124,65 +124,87 @@ export default function Home() {
   }, []);
 
 
-  useEffect(() => {
-    if (!isVideoLoaded) {
-      return;
-    }
+useEffect(() => {
+  if (!isVideoLoaded) return;
 
-    setTimeout(() => {
-      setIsTextVisible(true);
-    }, 200);
+  setTimeout(() => {
+    setIsTextVisible(true);
+  }, 200);
 
-    function draw() {
-      const video = videoRef.current;
-      if (!video || video.paused || video.ended) return;
+  let animationFrameId: number;
 
-      canvasRefs.current.forEach((canvas, index) => {
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        const style = canvasRef.current[index];
-        if (!style) return;
-
-        const row = Math.floor(index / columnsRef.current);
-        const col = index % columnsRef.current;
-
-        const sourceWidth = (video.videoWidth / columnsRef.current);
-        const sourceHeight = (video.videoHeight / rowsRef.current);
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        ctx.drawImage(
-          video,
-          col * sourceWidth, row * sourceHeight, sourceWidth, sourceHeight,
-          0, 0, canvas.width, canvas.height
-        );
-      });
-
-      requestAnimationFrame(draw);
-    }
-
-    const handleVideoPlay = () => {
-      draw();
-    };
-
+  function draw() {
     const video = videoRef.current;
-    if (video) {
-      if (!video) return;
+    if (!video || video.paused || video.ended) return;
 
-      video.addEventListener('play', handleVideoPlay);
-      video.addEventListener('playing', handleVideoPlay);
+    const columns = columnsRef.current;
+    const rows = rowsRef.current;
+
+    const sampleCanvas = canvasRefs.current[0];
+    if (!sampleCanvas) return;
+
+    const canvasTileWidth = sampleCanvas.width;
+    const canvasTileHeight = sampleCanvas.height;
+
+    const gridAspect = (columns * canvasTileWidth) / (rows * canvasTileHeight);
+    const videoAspect = video.videoWidth / video.videoHeight;
+
+    let cropWidth = video.videoWidth;
+    let cropHeight = video.videoHeight;
+    let cropX = 0;
+    let cropY = 0;
+
+    if (videoAspect > gridAspect) {
+      cropWidth = video.videoHeight * gridAspect;
+      cropX = (video.videoWidth - cropWidth) / 2;
+    } else if (videoAspect < gridAspect) {
+      cropHeight = video.videoWidth / gridAspect;
+      cropY = (video.videoHeight - cropHeight) / 2;
     }
 
+    const sourceTileWidth = cropWidth / columns;
+    const sourceTileHeight = cropHeight / rows;
 
-    return () => {
-      if (video) {
-        video.removeEventListener('play', handleVideoPlay);
-        video.removeEventListener('playing', handleVideoPlay);
-      }
-    };
-  }, [isVideoLoaded]);
+    canvasRefs.current.forEach((canvas, index) => {
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const row = Math.floor(index / columns);
+      const col = index % columns;
+
+      const sx = cropX + col * sourceTileWidth;
+      const sy = cropY + row * sourceTileHeight;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        video,
+        sx, sy, sourceTileWidth, sourceTileHeight,
+        0, 0, canvas.width, canvas.height
+      );
+    });
+
+    // 🔁 Request next frame
+    animationFrameId = requestAnimationFrame(draw);
+  }
+
+  const handleVideoPlay = () => {
+    draw();
+  };
+
+  const video = videoRef.current;
+  if (video) {
+    video.addEventListener('play', handleVideoPlay);
+  }
+
+  return () => {
+    if (video) {
+      video.removeEventListener('play', handleVideoPlay);
+    }
+    cancelAnimationFrame(animationFrameId);
+  };
+}, [isVideoLoaded]);
+
 
   useEffect(() => {
     setRows(isMobile ? 3 : 3)
