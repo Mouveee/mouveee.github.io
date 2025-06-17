@@ -54,9 +54,12 @@ export default function Skills() {
                                 <div key={index} className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">
                                     <div className="tile-inner relative w-full h-full transform-style-preserve-3d text- bg-[#0d0d0d]">
                                         <div className="tile-front bg-gray-800 text-white p-4 rounded-lg shadow-lg flex items-center justify-center h-full flex-col">
-                                            <div className="text-pink-500 leading-4 font-mono text-1l sm:text-3xl m-auto p-5 text-center w-full whitespace-nowrap">
-                                                {skill.icon}
+                                            <div className="flex justify-center items-center w-full h-24 sm:h-32">
+                                                <div className="text-pink-500 font-mono text-xl sm:text-3xl text-center">
+                                                    {skill.icon}
+                                                </div>
                                             </div>
+
                                             <div className="text-lg font-semibold m-2">
                                                 {skill.label}
                                             </div>
