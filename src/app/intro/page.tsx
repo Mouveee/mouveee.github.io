@@ -29,12 +29,12 @@ export default function IntroSection() {
           Marco Huwig – Webentwickler
         </h1>
         <p className="text-lg mb-6 fade-in">
-          Hallo, mein Name ist Marco Huwig, ich lebe in Saarbrücken und bin ausgebildeter Webentwickler.
+          Mein Name ist Marco Huwig, ich lebe in Saarbrücken und bin ausgebildeter Webentwickler.
         </p>
         <p className="text-lg mb-6 fade-in">
           In den letzten vier Jahren habe ich als Full-Stack-Entwickler bei Neocosmo eine Vielzahl an Webprojekten erfolgreich 
           realisiert. Dazu zählt die Entwicklung von Frontend Komponenten, das Entwickeln und Integrieren von REST APIs,  
-          sowie die Wartung und Support für bestehende Funktionalitäten. 
+          sowie Wartung und Support für bestehende Funktionalitäten. 
         </p>
         <p className="text-lg mb-6 fade-in">
           Ich arbeite mit modernen Technologien wie React, NextJS und Vue und lege großen Wert auf sauberen, 
