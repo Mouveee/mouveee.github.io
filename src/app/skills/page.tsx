@@ -39,7 +39,7 @@ export default function Skills() {
     return (
         <div className="relative min-h-screen flex flex-col items-center justify-center px-8 overflow-hidden p-10">
             <div className="absolute inset-0 bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove z-0"></div>
-            <h1 className="text-5xl font-bold tracking-wide uppercase z-10">
+            <h1 className="text-3xl font-bold tracking-wide uppercase z-10">
                 Skills & Erfahrung
             </h1>
 
@@ -48,7 +48,7 @@ export default function Skills() {
                     <div
                         key={index}
                     >
-                        <h2 className="text-3xl font-bold mb-4 z-50">{category.name}</h2>
+                        <h2 className="text-2xl font-bold mb-4 z-50">{category.name}</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
                             {skills?.filter(skill => skill.category_id === category.id).map((skill, index) => (
                                 <div key={index} className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">

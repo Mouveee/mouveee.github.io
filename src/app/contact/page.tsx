@@ -8,7 +8,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove">
       <div className="max-w-3xl w-full bg-black p-8 rounded-lg shadow-lg border border-gray-800 opacity-90">
-        <h1 className="text-5xl font-semibold text-center uppercase mb-4">Kontakt</h1>
+        <h1 className="text-3xl font-semibold text-center uppercase mb-4">Kontakt</h1>
 
         <div className="divide-y divide-gray-900">
           <div

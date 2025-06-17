@@ -42,7 +42,7 @@ export default function About() {
   const [hoveredCategory, setHoveredCategory] = useState<number>(-1);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-10 relative overflow-hidden bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove">
-      <h1 className="text-5xl font-semibold mb-8 uppercase">Interessen & Hobbies</h1>
+      <h1 className="text-3xl font-semibold mb-8 uppercase">Hobbies & Interessen</h1>
 
       <div className="max-w-3xl w-full bg-black p-8 rounded-lg shadow-lg border border-gray-800 opacity-90">
         <div className="divide-y divide-gray-900">
