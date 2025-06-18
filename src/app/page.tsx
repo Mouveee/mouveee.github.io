@@ -12,13 +12,6 @@ interface CanvasStyle {
   opacity: number;
   left: number;
   top: number;
-  randomOffset: {
-    width: number;
-    height: number;
-    margin: number;
-    padding: number;
-    x: number;
-  };
   animation: {
     duration: number;
     delay: number;
@@ -31,8 +24,7 @@ export default function Home() {
   const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
   const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [innerWidth, setInnerWidth] = useState(1280);
-  const [innerHeight, setInnerHeight] = useState(768);
+  const [screenSize, setScreenSize] = useState({height: 1280, width: 768})
   const [rows, setRows] = useState<number>(3);
   const [columns, setColumns] = useState<number>(6);
   const [numPieces, setNumPieces] = useState<number>(18);
@@ -55,16 +47,15 @@ export default function Home() {
   const updateDimensions = (width: number, height: number) => {
     setIsMobile(window.innerWidth <= 768);
 
-    setInnerWidth(width);
-    setInnerHeight(height);
+    setScreenSize({width, height});
   }
 
   const updateCanvasStyles = useCallback(() => {
     const styles = Array.from({ length: numPieces }).map((_, index) => {
       const row = Math.floor(index / columns);
       const col = index % columns;
-      const baseWidth = innerWidth / columns;
-      const baseHeight = innerHeight / rows;
+      const baseWidth = screenSize.width / columns;
+      const baseHeight = screenSize.height / rows;
 
       return {
         width: baseWidth,
@@ -74,14 +65,6 @@ export default function Home() {
         opacity: 1,
         left: col * baseWidth,
         top: row * baseHeight,
-        randomOffset: {
-          width: 0,
-          height: 0,
-          margin: 1,
-          padding: 0,
-          x: 0,
-          y: 0,
-        },
         animation: {
           duration: 2,
           delay: 2,
@@ -90,7 +73,7 @@ export default function Home() {
     });
 
     setCanvasStyles(styles);
-  }, [columns, innerHeight, innerWidth, numPieces, rows])
+  }, [columns, screenSize, numPieces, rows])
 
   useEffect(() => {
     const width = window.innerWidth;
@@ -104,6 +87,7 @@ export default function Home() {
         window.removeEventListener("wheel", handleScroll);
       }
     };
+
 
     const onResize = () => {
       if (resizeTimeout.current !== null) {
@@ -232,7 +216,7 @@ export default function Home() {
 
   useEffect(() => {
     updateCanvasStyles();
-  }, [innerWidth, innerHeight, updateCanvasStyles])
+  }, [screenSize, updateCanvasStyles])
 
   const handleVideoLoad = () => {
     setIsVideoLoaded(true);
@@ -243,15 +227,15 @@ export default function Home() {
     if (!style) return {};
 
     return {
-      left: `${style.left - style.randomOffset.x}px`,
+      left: `${style.left}px`,
       top: `${style.top}px`,
-      padding: `${style.padding + style.randomOffset.padding}px`,
+      padding: `${style.padding}px`,
       opacity: isVideoLoaded ? style.opacity : 0,
       transition: "opacity 3s",
-      animation: `subtle-rotate-y ${style.animation.duration}s linear infinite alternate`,
+      animation: `subtle-rotate-y${Math.random() * 10 > 4.5 ? 'negative' : ''} ${style.animation.duration}s linear infinite alternate`,
       animationDelay: `${style.animation.delay}s`,
-      width: `${style.width + style.randomOffset.width}px`,
-      height: `${style.height + style.randomOffset.height}px`,
+      width: `${style.width}px`,
+      height: `${style.height}px`,
       mixBlendMode: "screen" as const,
       filter: "contrast(1.2) grayscale(1) hue-rotate(0deg) saturate(0.1)",
     };
@@ -287,8 +271,8 @@ export default function Home() {
                   ref={(el) => { canvasRefs.current[index] = el; }}
                   className="absolute flicker inset-0 grayscale bg-black"
                   style={getCanvasStyle(style)}
-                  width={style.width + style.randomOffset.width}
-                  height={style.height + style.randomOffset.height}
+                  width={style.width}
+                  height={style.height}
                 ></canvas>
 
                 <div
