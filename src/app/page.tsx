@@ -25,24 +25,23 @@ export default function Home() {
   const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [screenSize, setScreenSize] = useState({height: 1280, width: 768})
-  const [rows, setRows] = useState<number>(3);
-  const [columns, setColumns] = useState<number>(6);
+  const [rowsAndColumnsCount, setRowsAndColumnsCount] = useState({rows: 3, columns: 6});
   const [numPieces, setNumPieces] = useState<number>(18);
 
   const homescreenRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const linkRef = useRef<HTMLAnchorElement | null>(null);
-  const rowsRef = useRef(rows);
-  const columnsRef = useRef(columns);
+  const rowsRef = useRef(rowsAndColumnsCount.rows);
+  const columnsRef = useRef(rowsAndColumnsCount.columns);
   const canvasRef = useRef(canvasStyles);
   const resizeTimeout = useRef<number | null>(null);
 
   useEffect(() => {
-    if (rows !== rowsRef.current) rowsRef.current = rows;
-    if (columns !== columnsRef.current) columnsRef.current = columns;
+    if (rowsAndColumnsCount.rows !== rowsRef.current) rowsRef.current = rowsAndColumnsCount.rows;
+    if (rowsAndColumnsCount.columns !== columnsRef.current) columnsRef.current = rowsAndColumnsCount.columns;
     if (canvasStyles !== canvasRef.current) canvasRef.current = canvasStyles;
-  }, [rows, columns, canvasStyles])
+  }, [rowsAndColumnsCount, canvasStyles])
 
   const updateDimensions = (width: number, height: number) => {
     setIsMobile(window.innerWidth <= 768);
@@ -52,10 +51,10 @@ export default function Home() {
 
   const updateCanvasStyles = useCallback(() => {
     const styles = Array.from({ length: numPieces }).map((_, index) => {
-      const row = Math.floor(index / columns);
-      const col = index % columns;
-      const baseWidth = screenSize.width / columns;
-      const baseHeight = screenSize.height / rows;
+      const row = Math.floor(index / rowsAndColumnsCount.columns);
+      const col = index % rowsAndColumnsCount.columns;
+      const baseWidth = screenSize.width / rowsAndColumnsCount.columns;
+      const baseHeight = screenSize.height / rowsAndColumnsCount.rows;
 
       return {
         width: baseWidth,
@@ -73,7 +72,7 @@ export default function Home() {
     });
 
     setCanvasStyles(styles);
-  }, [columns, screenSize, numPieces, rows])
+  }, [rowsAndColumnsCount, screenSize, numPieces])
 
   useEffect(() => {
     const width = window.innerWidth;
@@ -209,8 +208,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    setRows(isMobile ? 3 : 3)
-    setColumns(isMobile ? 2 : 6)
+    setRowsAndColumnsCount({rows: isMobile ? 3 : 3,columns: isMobile ? 2 : 6})
     setNumPieces(isMobile ? 6 : 18)
   }, [isMobile])
 
@@ -260,8 +258,8 @@ export default function Home() {
         {/* Canvas Section */}
         <div className="relative w-full md:w-1/2 h-full bg-black">
           {canvasStyles.map((style, index) => {
-            const row = Math.floor(index / columns);
-            const col = index % columns;
+            const row = Math.floor(index / rowsAndColumnsCount.columns);
+            const col = index % rowsAndColumnsCount.columns;
 
             if (col >= 3 || row >= 3) return null;
 
