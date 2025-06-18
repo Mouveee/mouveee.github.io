@@ -74,19 +74,20 @@ export default function Home() {
         height: baseHeight,
         margin: 1,
         padding: 1,
-        opacity: 0.9 + Math.random() * 0.1,
+        opacity: 1,
         left: col * baseWidth,
         top: row * baseHeight,
         randomOffset: {
-          width: Math.random() * 3,
-          height: Math.random() * 3,
-          margin: Math.random() * 2,
-          padding: Math.random() * 2,
-          x: Math.random() * 2,
+          width: 0,
+          height: 0,
+          margin: 1,
+          padding: 0,
+          x: 0,
+          y: 0,
         },
         animation: {
-          duration: 2 + Math.random() * 2,
-          delay: Math.random() * 2,
+          duration: 2,
+          delay: 2,
         }
       };
     });
@@ -124,86 +125,103 @@ export default function Home() {
   }, []);
 
 
-useEffect(() => {
-  if (!isVideoLoaded) return;
+  useEffect(() => {
+    if (!isVideoLoaded) return;
 
-  setTimeout(() => {
-    setIsTextVisible(true);
-  }, 200);
+    setTimeout(() => {
+      setIsTextVisible(true);
+    }, 200);
 
-  let animationFrameId: number;
+    let isRunning = false;
+    let animationFrameId: number;
 
-  function draw() {
+    function draw() {
+      const video = videoRef.current;
+
+      if (!video || video.paused || video.ended) {
+        isRunning = false;
+        return;
+      }
+
+      const columns = columnsRef.current;
+      const rows = rowsRef.current;
+
+      const sampleCanvas = canvasRefs.current[0];
+      if (!sampleCanvas) return;
+
+      const canvasTileWidth = sampleCanvas.width;
+      const canvasTileHeight = sampleCanvas.height;
+
+      const gridAspect = (columns * canvasTileWidth) / (rows * canvasTileHeight);
+      const videoAspect = video.videoWidth / video.videoHeight;
+
+      let cropWidth = video.videoWidth;
+      let cropHeight = video.videoHeight;
+      let cropX = 0;
+      let cropY = 0;
+
+      if (videoAspect > gridAspect) {
+        cropWidth = video.videoHeight * gridAspect;
+        cropX = (video.videoWidth - cropWidth) / 2;
+      } else if (videoAspect < gridAspect) {
+        cropHeight = video.videoWidth / gridAspect;
+        cropY = (video.videoHeight - cropHeight) / 2;
+      }
+
+      const sourceTileWidth = cropWidth / columns;
+      const sourceTileHeight = cropHeight / rows;
+
+      canvasRefs.current.forEach((canvas, index) => {
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        const row = Math.floor(index / columns);
+        const col = index % columns;
+
+        const sx = cropX + col * sourceTileWidth;
+        const sy = cropY + row * sourceTileHeight;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(
+          video,
+          sx, sy, sourceTileWidth, sourceTileHeight,
+          0, 0, canvas.width, canvas.height
+        );
+      });
+
+      // 🔁 Request next frame
+      if (isRunning) animationFrameId = requestAnimationFrame(draw);
+    }
+
+    const handleVideoPlay = () => {
+      if (!isRunning) {
+        isRunning = true;
+        draw();
+      }
+    };
+
+    const handleVideoPause = () => {
+      isRunning = false;
+    };
+
     const video = videoRef.current;
-    if (!video || video.paused || video.ended) return;
-
-    const columns = columnsRef.current;
-    const rows = rowsRef.current;
-
-    const sampleCanvas = canvasRefs.current[0];
-    if (!sampleCanvas) return;
-
-    const canvasTileWidth = sampleCanvas.width;
-    const canvasTileHeight = sampleCanvas.height;
-
-    const gridAspect = (columns * canvasTileWidth) / (rows * canvasTileHeight);
-    const videoAspect = video.videoWidth / video.videoHeight;
-
-    let cropWidth = video.videoWidth;
-    let cropHeight = video.videoHeight;
-    let cropX = 0;
-    let cropY = 0;
-
-    if (videoAspect > gridAspect) {
-      cropWidth = video.videoHeight * gridAspect;
-      cropX = (video.videoWidth - cropWidth) / 2;
-    } else if (videoAspect < gridAspect) {
-      cropHeight = video.videoWidth / gridAspect;
-      cropY = (video.videoHeight - cropHeight) / 2;
-    }
-
-    const sourceTileWidth = cropWidth / columns;
-    const sourceTileHeight = cropHeight / rows;
-
-    canvasRefs.current.forEach((canvas, index) => {
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      const row = Math.floor(index / columns);
-      const col = index % columns;
-
-      const sx = cropX + col * sourceTileWidth;
-      const sy = cropY + row * sourceTileHeight;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(
-        video,
-        sx, sy, sourceTileWidth, sourceTileHeight,
-        0, 0, canvas.width, canvas.height
-      );
-    });
-
-    // 🔁 Request next frame
-    animationFrameId = requestAnimationFrame(draw);
-  }
-
-  const handleVideoPlay = () => {
-    draw();
-  };
-
-  const video = videoRef.current;
-  if (video) {
-    video.addEventListener('play', handleVideoPlay);
-  }
-
-  return () => {
     if (video) {
-      video.removeEventListener('play', handleVideoPlay);
+      video.addEventListener('play', handleVideoPlay);
     }
-    cancelAnimationFrame(animationFrameId);
-  };
-}, [isVideoLoaded]);
+
+    return () => {
+      isRunning = false;
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      if (video) {
+        video.removeEventListener('play', handleVideoPlay);
+        video.removeEventListener('pause', handleVideoPause);
+        video.removeEventListener('ended', handleVideoPause);
+      }
+    };
+  }, [isVideoLoaded]);
 
 
   useEffect(() => {
@@ -226,7 +244,7 @@ useEffect(() => {
 
     return {
       left: `${style.left - style.randomOffset.x}px`,
-      top: `${style.top}px`,
+      top: `${style.top - style.randomOffset.y}px`,
       padding: `${style.padding + style.randomOffset.padding}px`,
       opacity: isVideoLoaded ? style.opacity : 0,
       transition: "opacity 3s",
@@ -246,7 +264,7 @@ useEffect(() => {
       <Dots numberOfDots={13} />
 
       <div
-        className={`relative flex flex-col md:flex-row overflow-y-clip w-[100vw] h-[100vh] justify-evenly bg-black bg-opacity-50`}
+        className={`relative flex flex-col md:flex-row overflow-y-clip w-[100vw] h-[100vh] justify-evenly bg-black bg-opacity-5`}
       >
         {/* Loading Spinner */}
         {isLoading && (
@@ -288,7 +306,7 @@ useEffect(() => {
 
           {/* Text over canvas on mobile */}
           <div
-            className="absolute inset-0 flex flex-col justify-end items-center text-center px-4 mb-10 bg-black rounded-md h-fit w-fit md:hidden top-[80%] bg-opacity-60 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-800"
+            className="absolute inset-0 flex flex-col justify-end items-center text-center p-4 mb-10 bg-black rounded-md h-fit w-fit md:hidden top-[80%] bg-opacity-60 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-800"
             style={{ opacity: isTextVisible ? 1 : 0 }}
           >
             <h1 className="glitch font-bold text-4xl uppercase tracking-widest mb-2">MARCO HUWIG</h1>
