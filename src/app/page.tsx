@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import NavigationMenu from './components/NavigationMenu';
 import Dots from './components/Dots';
 
@@ -44,6 +44,7 @@ export default function Home() {
   const rowsRef = useRef(rows);
   const columnsRef = useRef(columns);
   const canvasRef = useRef(canvasStyles);
+  const resizeTimeout = useRef<number | null>(null);
 
   useEffect(() => {
     if (rows !== rowsRef.current) rowsRef.current = rows;
@@ -57,10 +58,6 @@ export default function Home() {
     setInnerWidth(width);
     setInnerHeight(height);
   }
-
-  useEffect(() => {
-
-  }, [rows, columns])
 
   const updateCanvasStyles = useCallback(() => {
     const styles = Array.from({ length: numPieces }).map((_, index) => {
@@ -109,11 +106,14 @@ export default function Home() {
     };
 
     const onResize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      if (resizeTimeout.current !== null) {
+        clearTimeout(resizeTimeout.current);
+      }
+      resizeTimeout.current = window.setTimeout(() => {
+        updateDimensions(window.innerWidth, window.innerHeight);
+      }, 100);
+    };
 
-      updateDimensions(width, height);
-    }
 
     window.addEventListener("wheel", handleScroll);
     window.addEventListener("resize", onResize);
@@ -306,7 +306,7 @@ export default function Home() {
 
           {/* Text over canvas on mobile */}
           <div
-            className="absolute inset-0 flex flex-col justify-end items-center text-center p-4 mb-10 bg-black rounded-md h-fit w-fit md:hidden top-[80%] bg-opacity-60 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-800"
+            className="absolute inset-0 flex flex-col justify-end items-center text-center p-4 mb-10 bg-black rounded-md h-fit md:hidden top-[80%] bg-opacity-60 left-1/2 -translate-x-1/2 -translate-y-1/2 border-gray-800 w-3/4"
             style={{ opacity: isTextVisible ? 1 : 0 }}
           >
             <h1 className="glitch font-bold text-4xl uppercase tracking-widest mb-2">MARCO HUWIG</h1>
