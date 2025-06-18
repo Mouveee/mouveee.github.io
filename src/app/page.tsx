@@ -244,7 +244,6 @@ export default function Home() {
 
     return {
       left: `${style.left - style.randomOffset.x}px`,
-      top: `${style.top - style.randomOffset.y}px`,
       padding: `${style.padding + style.randomOffset.padding}px`,
       opacity: isVideoLoaded ? style.opacity : 0,
       transition: "opacity 3s",
