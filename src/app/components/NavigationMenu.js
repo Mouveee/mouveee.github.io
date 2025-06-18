@@ -26,7 +26,7 @@ const NavigationMenu = () => {
 
       {/* Menu Container */}
       <nav
-        className={`fixed top-0 right-0 p-8 bg-black h-screen w-64 rounded-l-lg shadow-lg transition-transform duration-300 ease-in-out z-50 border-pink-500 border-1 ${
+        className={`fixed top-0 right-0 p-8 bg-black h-screen w-fit rounded-l-lg shadow-lg transition-transform duration-300 ease-in-out z-50 border-pink-500 border-l-2 ${
           isHovered ? "translate-x-0" : "translate-x-full"
         }`}
         onMouseEnter={() => setIsHovered(true)}
