@@ -43,7 +43,7 @@ export default function Dots( { numberOfDots }: { numberOfDots: number }) {
       {dots.map((dot, index) => (
         <div
           key={index}
-          className="fixed inset-0 bg-pink-400 opacity-30 rounded-full xxxxx"
+          className="fixed inset-0 bg-pink-400 opacity-30 rounded-full"
           style={{
             top: dot.top,
             left: dot.left,
