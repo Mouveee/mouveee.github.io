@@ -17,7 +17,7 @@ const NavigationMenu = () => {
   return (
     <div className="relative">
       <div
-        className={`overlay fixed w-[100vw] h-[100vh] bg-black ${isHovered ? 'bg-opacity-80' : 'bg-opacity-0'} z- top-0 left-0 transition-all duration-500`}
+        className={`overlay fixed w-[100vw] h-[100vh] bg-black pointer-events-none ${isHovered ? 'bg-opacity-80' : 'bg-opacity-0'} z-50 top-0 left-0 transition-all duration-800`}
       >
       </div>
 
@@ -37,10 +37,10 @@ const NavigationMenu = () => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <ul className="flex flex-col gap-4 text-right">
+        <ul className="flex flex-col gap-4 text-right mt-10">
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              currentPath === "/intro" ? "hidden" : ""
+              currentPath === "/intro" ? "text-pink-500" : ""
             }`}
           >
             <Link href="/intro">Intro</Link>
@@ -48,7 +48,7 @@ const NavigationMenu = () => {
 
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              currentPath === "/skills" ? "hidden" : ""
+              currentPath === "/skills" ? "text-pink-500" : ""
             }`}
           >
             <Link href="/skills">Skills</Link>
@@ -56,7 +56,7 @@ const NavigationMenu = () => {
 
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              currentPath === "/about" ? "hidden" : ""
+              currentPath === "/about" ? "text-pink-500" : ""
             }`}
           >
             <Link href="/about">About</Link>
@@ -64,7 +64,7 @@ const NavigationMenu = () => {
 
           <li
             className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
-              currentPath === "/contact" ? "hidden" : ""
+              currentPath === "/contact" ? "text-pink-500" : ""
             }`}
           >
             <Link href="/contact">Kontakt</Link>
