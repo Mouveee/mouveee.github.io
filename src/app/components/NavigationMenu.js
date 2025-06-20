@@ -37,9 +37,9 @@ const NavigationMenu = () => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <ul className="flex flex-col gap-4 text-right mt-10">
+        <ul className="flex flex-col gap-4 text-right">
           <li
-            className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
+            className={`text-xl mb-2 uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
               currentPath === "/intro" ? "text-pink-500" : ""
             }`}
           >
@@ -47,7 +47,7 @@ const NavigationMenu = () => {
           </li>
 
           <li
-            className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
+            className={`text-xl mb-2 uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
               currentPath === "/skills" ? "text-pink-500" : ""
             }`}
           >
@@ -55,7 +55,7 @@ const NavigationMenu = () => {
           </li>
 
           <li
-            className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
+            className={`text-xl mb-2 uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
               currentPath === "/about" ? "text-pink-500" : ""
             }`}
           >
@@ -63,7 +63,7 @@ const NavigationMenu = () => {
           </li>
 
           <li
-            className={`text-xl uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
+            className={`text-xl mb-2 uppercase font-bold transition-transform transform hover:scale-110 hover:text-pink-500 hover:shadow-lg ${
               currentPath === "/contact" ? "text-pink-500" : ""
             }`}
           >
