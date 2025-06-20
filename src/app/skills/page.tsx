@@ -46,7 +46,7 @@ export default function Skills() {
             </h1>
 
             {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center pt-16">
+                <div className="inset-0 flex items-center justify-center pt-8">
                     <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin z-50"></div>
                 </div>
             )}
