@@ -36,8 +36,8 @@ export default function Contact() {
           </div>
         </div>
 
-        <div className="text-center mt-4">
-          <Link href="mailto:huwig.marco@gmail.com" className="text-center text-2xl uppercase hover:underline hover:text-pink-500 transition">Kontakt aufnehmen</Link>
+        <div className="text-center mt-4 animate-bounce no-underline">
+          <Link href="mailto:huwig.marco@gmail.com" className="text-center no-underline text-2xl uppercase hover:underline hover:text-pink-500 transition">Kontakt aufnehmen</Link>
         </div>
       </div>
       <style jsx>{`
