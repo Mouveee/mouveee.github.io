@@ -20,6 +20,7 @@ interface Skill {
 
 export default function Skills() {
     const [skills, setskills] = useState<Skill[] | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [categories, setCategories] = useState<Category[] | null>(null);
 
     useEffect(() => {
@@ -31,6 +32,7 @@ export default function Skills() {
             const data = await response.json();
             setskills(data.skills);
             setCategories(data.categories);
+            setIsLoading(false);
         };
 
         fetchSkills();
@@ -42,6 +44,12 @@ export default function Skills() {
             <h1 className="text-4xl font-bold tracking-wide uppercase z-10">
                 Skills & Erfahrung
             </h1>
+
+            {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center pt-16">
+                    <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin z-50"></div>
+                </div>
+            )}
 
             <div className="mt-12 space-y-8 w-full max-w-4xl z-50 text-center">
                 {categories && categories.map((category, index) => (
