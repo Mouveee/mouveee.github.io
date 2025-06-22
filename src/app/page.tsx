@@ -145,7 +145,7 @@ export default function Home() {
 
       if (videoAspect > gridAspect) {
         cropWidth = video.videoHeight * gridAspect;
-        cropX = isMobile ? 0 : (video.videoWidth - cropWidth) / 2;
+        cropX = isMobile ? 120 : (video.videoWidth - cropWidth) / 2;
       } else if (videoAspect < gridAspect) {
         cropHeight = video.videoWidth / gridAspect;
         cropY = (video.videoHeight - cropHeight) / 2;
