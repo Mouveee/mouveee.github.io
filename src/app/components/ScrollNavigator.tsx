@@ -44,15 +44,6 @@ export default function ScrollNavigator() {
       }, 800); // Adjust delay as needed
     };
 
-    // Desktop scroll
-    const onWheel = (e: WheelEvent) => {
-      if (e.deltaY > 50) {
-        navigateIfNeeded("down");
-      } else if (e.deltaY < -50) {
-        navigateIfNeeded("up");
-      }
-    };
-
     // Mobile touch
     const onTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY;
@@ -67,12 +58,10 @@ export default function ScrollNavigator() {
       }
     };
 
-    window.addEventListener("wheel", onWheel);
     window.addEventListener("touchstart", onTouchStart);
     window.addEventListener("touchend", onTouchEnd);
 
     return () => {
-      window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
     };
