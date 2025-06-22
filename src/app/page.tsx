@@ -24,8 +24,8 @@ export default function Home() {
   const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
   const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [screenSize, setScreenSize] = useState({height: 1280, width: 768})
-  const [rowsAndColumnsCount, setRowsAndColumnsCount] = useState({rows: 3, columns: 6});
+  const [screenSize, setScreenSize] = useState({ height: 1280, width: 768 })
+  const [rowsAndColumnsCount, setRowsAndColumnsCount] = useState({ rows: 3, columns: 6 });
   const [numPieces, setNumPieces] = useState<number>(18);
 
   const homescreenRef = useRef<HTMLDivElement | null>(null);
@@ -46,7 +46,7 @@ export default function Home() {
   const updateDimensions = (width: number, height: number) => {
     setIsMobile(window.innerWidth <= 768);
 
-    setScreenSize({width, height});
+    setScreenSize({ width, height });
   }
 
   const updateCanvasStyles = useCallback(() => {
@@ -145,7 +145,7 @@ export default function Home() {
 
       if (videoAspect > gridAspect) {
         cropWidth = video.videoHeight * gridAspect;
-        cropX = (video.videoWidth - cropWidth) / 2;
+        cropX = isMobile ? 0 : (video.videoWidth - cropWidth) / 2;
       } else if (videoAspect < gridAspect) {
         cropHeight = video.videoWidth / gridAspect;
         cropY = (video.videoHeight - cropHeight) / 2;
@@ -208,7 +208,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    setRowsAndColumnsCount({rows: isMobile ? 3 : 3,columns: isMobile ? 2 : 6})
+    setRowsAndColumnsCount({ rows: isMobile ? 3 : 3, columns: isMobile ? 2 : 6 })
     setNumPieces(isMobile ? 6 : 18)
   }, [isMobile])
 
