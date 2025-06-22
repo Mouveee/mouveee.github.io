@@ -4,45 +4,78 @@ import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 const pageOrder = ["/intro", "/skills", "/about", "/contact"];
+const threshold = 100; // Pixels from top/bottom to allow navigation
 
 export default function ScrollNavigator() {
   const router = useRouter();
   const pathname = usePathname();
   const isNavigating = useRef(false);
-  const threshold = 100; // Pixels from bottom or top to consider "end"
+  const touchStartY = useRef(0);
+
+  const getScrollState = () => {
+    const scrollTop = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const docHeight = document.body.scrollHeight;
+
+    return {
+      atBottom: scrollTop + windowHeight >= docHeight - threshold,
+      atTop: scrollTop <= threshold,
+    };
+  };
 
   useEffect(() => {
-    const handleScroll = (event: WheelEvent) => {
-      if (isNavigating.current) return;
 
+    const navigateIfNeeded = (direction: "up" | "down") => {
       const currentIndex = pageOrder.indexOf(pathname);
-      if (currentIndex === -1) return;
+      if (currentIndex === -1 || isNavigating.current) return;
 
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const docHeight = document.body.scrollHeight;
+      const { atTop, atBottom } = getScrollState();
 
-      const atBottom = scrollTop + windowHeight >= docHeight - threshold;
-      const atTop = scrollTop <= threshold;
-
-      if (event.deltaY > 0 && atBottom && currentIndex < pageOrder.length - 1) {
-        // Scroll down at bottom
+      if (direction === "down" && atBottom && currentIndex < pageOrder.length - 1) {
         isNavigating.current = true;
         router.push(pageOrder[currentIndex + 1]);
-      } else if (event.deltaY < 0 && atTop && currentIndex > 0) {
-        // Scroll up at top
+      } else if (direction === "up" && atTop && currentIndex > 0) {
         isNavigating.current = true;
         router.push(pageOrder[currentIndex - 1]);
       }
 
-      // Reset navigation flag after delay
       setTimeout(() => {
         isNavigating.current = false;
-      }, 800);
+      }, 800); // Adjust delay as needed
     };
 
-    window.addEventListener("wheel", handleScroll);
-    return () => window.removeEventListener("wheel", handleScroll);
+    // Desktop scroll
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY > 50) {
+        navigateIfNeeded("down");
+      } else if (e.deltaY < -50) {
+        navigateIfNeeded("up");
+      }
+    };
+
+    // Mobile touch
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartY.current = e.touches[0].clientY;
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const deltaY = touchStartY.current - e.changedTouches[0].clientY;
+      if (deltaY > 50) {
+        navigateIfNeeded("down");
+      } else if (deltaY < -50) {
+        navigateIfNeeded("up");
+      }
+    };
+
+    window.addEventListener("wheel", onWheel);
+    window.addEventListener("touchstart", onTouchStart);
+    window.addEventListener("touchend", onTouchEnd);
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
   }, [pathname, router]);
 
   return null;
