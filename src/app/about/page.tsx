@@ -5,19 +5,19 @@ import Dots from '@/app/components/Dots';
 
 const interests = [
   {
-    category: "Literature",
-    items: [
-      "Haruki Murakami",
-      "Cormac McCarthy",
-      "Raymond Chandler",
-    ]
-  },
-  {
     category: "Filme & Serien",
     items: [
       "Twin Peaks",
       "Studio Ghibli",
       "Eternal Sunshine of the spotless Mind"
+    ]
+  },
+  {
+    category: "Literatur",
+    items: [
+      "Haruki Murakami",
+      "Cormac McCarthy",
+      "Raymond Chandler",
     ]
   },
   {
