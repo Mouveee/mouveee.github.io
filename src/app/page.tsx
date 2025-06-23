@@ -27,11 +27,10 @@ export default function Home() {
   const [screenSize, setScreenSize] = useState({ height: 1280, width: 768 })
   const [rowsAndColumnsCount, setRowsAndColumnsCount] = useState({ rows: 3, columns: 6 });
   const [numPieces, setNumPieces] = useState<number>(18);
+  const [browser, setBrowser] = useState('');
 
-  const homescreenRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
-  const linkRef = useRef<HTMLAnchorElement | null>(null);
   const rowsRef = useRef(rowsAndColumnsCount.rows);
   const columnsRef = useRef(rowsAndColumnsCount.columns);
   const canvasRef = useRef(canvasStyles);
@@ -77,16 +76,22 @@ export default function Home() {
   useEffect(() => {
     const width = window.innerWidth;
     const height = window.innerHeight;
+    const userAgent = navigator.userAgent;
+
+    if (userAgent.includes('Firefox')) {
+      setBrowser('Firefox');
+    } else if (userAgent.includes('Chrome')) {
+      setBrowser('Chrome');
+    } else if (userAgent.includes('Safari')) {
+      setBrowser('Safari');
+    } else if (userAgent.includes('Edge')) {
+      setBrowser('Edge');
+    } else {
+      setBrowser('Unknown');
+    }
+    console.log(browser)
 
     updateDimensions(width, height);
-
-    const handleScroll = async (event: WheelEvent) => {
-      if (event.deltaY > 0 && homescreenRef.current) {
-        linkRef.current?.click();
-        window.removeEventListener("wheel", handleScroll);
-      }
-    };
-
 
     const onResize = () => {
       if (resizeTimeout.current !== null) {
@@ -97,17 +102,13 @@ export default function Home() {
       }, 100);
     };
 
-
-    window.addEventListener("wheel", handleScroll);
     window.addEventListener("resize", onResize);
 
     return () => {
-      window.removeEventListener("wheel", handleScroll);
       window.removeEventListener("resize", onResize);
     }
-  }, []);
-
-
+  }, [browser]);
+  
   useEffect(() => {
     if (!isVideoLoaded) return;
 
