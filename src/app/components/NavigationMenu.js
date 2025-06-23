@@ -17,12 +17,12 @@ const NavigationMenu = () => {
   return (
     <div className="relative">
       <div
-        className={`overlay fixed w-[100vw] h-[100vh] bg-black pointer-events-none ${isHovered ? 'bg-opacity-80' : 'bg-opacity-0'} z-50 top-0 left-0 transition-all duration-800`}
+        className={`overlay fixed w-[100vw] h-[100vh] bg-black pointer-events-none ${isHovered ? 'bg-opacity-80' : 'bg-opacity-0'} z-50 top-0 left-0 transition-opacity duration-1000`}
       >
       </div>
 
       <div
-        className="fixed h-20 w-20 flex items-start justify-end top-10 right-4 cursor-pointer z-50"
+        className={`fixed h-20 w-20 flex items-start justify-end top-10 right-4 cursor-pointer z-50${currentPath == "/" ? ' animate-bounce' : ''}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
