@@ -1,244 +1,23 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
 import NavigationMenu from './components/NavigationMenu';
 import Dots from './components/Dots';
-
-interface CanvasStyle {
-  width: number;
-  height: number;
-  margin: number;
-  padding: number;
-  opacity: number;
-  left: number;
-  top: number;
-  animation: {
-    duration: number;
-    delay: number;
-  };
-}
+import {
+  useScreenDimensions,
+  useGridConfig,
+  useCanvasStyles,
+  useVideoLoader,
+  useVideoCanvasRenderer,
+  useCanvasStyler
+} from './CustomHooks/home';
 
 export default function Home() {
-  const [isVideoLoaded, setIsVideoLoaded] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isTextVisible, setIsTextVisible] = useState<boolean>(false);
-  const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [screenSize, setScreenSize] = useState({ height: 1280, width: 768 })
-  const [rowsAndColumnsCount, setRowsAndColumnsCount] = useState({ rows: 3, columns: 6 });
-  const [numPieces, setNumPieces] = useState<number>(18);
-  const [browser, setBrowser] = useState('');
-
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
-  const rowsRef = useRef(rowsAndColumnsCount.rows);
-  const columnsRef = useRef(rowsAndColumnsCount.columns);
-  const canvasRef = useRef(canvasStyles);
-  const resizeTimeout = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (rowsAndColumnsCount.rows !== rowsRef.current) rowsRef.current = rowsAndColumnsCount.rows;
-    if (rowsAndColumnsCount.columns !== columnsRef.current) columnsRef.current = rowsAndColumnsCount.columns;
-    if (canvasStyles !== canvasRef.current) canvasRef.current = canvasStyles;
-  }, [rowsAndColumnsCount, canvasStyles])
-
-  const updateDimensions = (width: number, height: number) => {
-    setIsMobile(window.innerWidth <= 768);
-
-    setScreenSize({ width, height });
-  }
-
-  const updateCanvasStyles = useCallback(() => {
-    const styles = Array.from({ length: numPieces }).map((_, index) => {
-      const row = Math.floor(index / rowsAndColumnsCount.columns);
-      const col = index % rowsAndColumnsCount.columns;
-      const baseWidth = screenSize.width / rowsAndColumnsCount.columns;
-      const baseHeight = screenSize.height / rowsAndColumnsCount.rows;
-
-      return {
-        width: baseWidth,
-        height: baseHeight,
-        margin: 1,
-        padding: 1,
-        opacity: 1,
-        left: col * baseWidth,
-        top: row * baseHeight,
-        animation: {
-          duration: 2,
-          delay: 2,
-        }
-      };
-    });
-
-    setCanvasStyles(styles);
-  }, [rowsAndColumnsCount, screenSize, numPieces])
-
-  useEffect(() => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const userAgent = navigator.userAgent;
-
-    if (userAgent.includes('Firefox')) {
-      setBrowser('Firefox');
-    } else if (userAgent.includes('Chrome')) {
-      setBrowser('Chrome');
-    } else if (userAgent.includes('Safari')) {
-      setBrowser('Safari');
-    } else if (userAgent.includes('Edge')) {
-      setBrowser('Edge');
-    } else {
-      setBrowser('Unknown');
-    }
-    console.log(browser)
-
-    updateDimensions(width, height);
-
-    const onResize = () => {
-      if (resizeTimeout.current !== null) {
-        clearTimeout(resizeTimeout.current);
-      }
-      resizeTimeout.current = window.setTimeout(() => {
-        updateDimensions(window.innerWidth, window.innerHeight);
-      }, 100);
-    };
-
-    window.addEventListener("resize", onResize);
-
-    return () => {
-      window.removeEventListener("resize", onResize);
-    }
-  }, [browser]);
-  
-  useEffect(() => {
-    if (!isVideoLoaded) return;
-
-    setTimeout(() => {
-      setIsTextVisible(true);
-    }, 200);
-
-    let isRunning = false;
-    let animationFrameId: number;
-
-    function draw() {
-      const video = videoRef.current;
-
-      if (!video || video.paused || video.ended) {
-        isRunning = false;
-        return;
-      }
-
-      const columns = columnsRef.current;
-      const rows = rowsRef.current;
-
-      const sampleCanvas = canvasRefs.current[0];
-      if (!sampleCanvas) return;
-
-      const canvasTileWidth = sampleCanvas.width;
-      const canvasTileHeight = sampleCanvas.height;
-
-      const gridAspect = (columns * canvasTileWidth) / (rows * canvasTileHeight);
-      const videoAspect = video.videoWidth / video.videoHeight;
-
-      let cropWidth = video.videoWidth;
-      let cropHeight = video.videoHeight;
-      let cropX = 0;
-      let cropY = 0;
-
-      if (videoAspect > gridAspect) {
-        cropWidth = video.videoHeight * gridAspect;
-        cropX = isMobile ? 120 : (video.videoWidth - cropWidth) / 2;
-      } else if (videoAspect < gridAspect) {
-        cropHeight = video.videoWidth / gridAspect;
-        cropY = (video.videoHeight - cropHeight) / 2;
-      }
-
-      const sourceTileWidth = cropWidth / columns;
-      const sourceTileHeight = cropHeight / rows;
-
-      canvasRefs.current.forEach((canvas, index) => {
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        const row = Math.floor(index / columns);
-        const col = index % columns;
-
-        const sx = cropX + col * sourceTileWidth;
-        const sy = cropY + row * sourceTileHeight;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(
-          video,
-          sx, sy, sourceTileWidth, sourceTileHeight,
-          0, 0, canvas.width, canvas.height
-        );
-      });
-
-      // 🔁 Request next frame
-      if (isRunning) animationFrameId = requestAnimationFrame(draw);
-    }
-
-    const handleVideoPlay = () => {
-      if (!isRunning) {
-        isRunning = true;
-        draw();
-      }
-    };
-
-    const handleVideoPause = () => {
-      isRunning = false;
-    };
-
-    const video = videoRef.current;
-    if (video) {
-      video.addEventListener('play', handleVideoPlay);
-    }
-
-    return () => {
-      isRunning = false;
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      if (video) {
-        video.removeEventListener('play', handleVideoPlay);
-        video.removeEventListener('pause', handleVideoPause);
-        video.removeEventListener('ended', handleVideoPause);
-      }
-    };
-  }, [isVideoLoaded]);
-
-
-  useEffect(() => {
-    setRowsAndColumnsCount({ rows: isMobile ? 3 : 3, columns: isMobile ? 2 : 6 })
-    setNumPieces(isMobile ? 6 : 18)
-  }, [isMobile])
-
-  useEffect(() => {
-    updateCanvasStyles();
-  }, [screenSize, updateCanvasStyles])
-
-  const handleVideoLoad = () => {
-    setIsVideoLoaded(true);
-    setIsLoading(false);
-  };
-
-  const getCanvasStyle = (style: CanvasStyle | undefined) => {
-    if (!style) return {};
-
-    return {
-      left: `${style.left}px`,
-      top: `${style.top}px`,
-      padding: `${style.padding}px`,
-      opacity: isVideoLoaded ? style.opacity : 0,
-      transition: "opacity 3s",
-      animation: `subtle-rotate-y${Math.random() * 10 > 4.5 ? 'negative' : ''} ${style.animation.duration}s linear infinite alternate`,
-      animationDelay: `${style.animation.delay}s`,
-      width: `${style.width}px`,
-      height: `${style.height}px`,
-      mixBlendMode: "screen" as const,
-      filter: "contrast(1.2) grayscale(1) hue-rotate(0deg) saturate(0.1)",
-    };
-  };
+  const { screenSize, isMobile } = useScreenDimensions();
+  const { rowsAndColumnsCount, numPieces } = useGridConfig(isMobile);
+  const canvasStyles = useCanvasStyles(rowsAndColumnsCount, screenSize, numPieces);
+  const { isVideoLoaded, isLoading, isTextVisible, handleVideoLoad } = useVideoLoader();
+  const { videoRef, canvasRefs } = useVideoCanvasRenderer(isVideoLoaded, rowsAndColumnsCount, isMobile);
+  const { getCanvasStyle } = useCanvasStyler(isVideoLoaded);
 
   return (
     <div
@@ -322,6 +101,5 @@ export default function Home() {
         onLoadedData={handleVideoLoad}
       />
     </div>
-
   );
 }
