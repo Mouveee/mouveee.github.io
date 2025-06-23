@@ -278,7 +278,12 @@ export const useCanvasStyler = (isVideoLoaded: boolean) => {
       padding: `${style.padding}px`,
       opacity: isVideoLoaded ? style.opacity : 0,
       transition: "opacity 3s",
-      animation: `subtle-rotate-y${Math.random() * 10 > 4.5 ? 'negative' : ''} ${style.animation.duration}s linear infinite alternate`,
+      // Replace shorthand 'animation' with individual properties
+      animationName: `subtle-rotate-y${Math.random() * 10 > 4.5 ? 'negative' : ''}`,
+      animationDuration: `${style.animation.duration}s`,
+      animationTimingFunction: 'linear',
+      animationIterationCount: 'infinite',
+      animationDirection: 'alternate',
       animationDelay: `${style.animation.delay}s`,
       width: `${style.width}px`,
       height: `${style.height}px`,
