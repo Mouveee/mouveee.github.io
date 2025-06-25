@@ -28,7 +28,7 @@ export const useScreenDimensions = () => {
   useEffect(() => {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    
+
     updateDimensions(width, height);
 
     const onResize = () => {
@@ -91,8 +91,8 @@ export const useGridConfig = (isMobile: boolean) => {
 
 // Custom hook for canvas styles
 export const useCanvasStyles = (
-  rowsAndColumnsCount: { rows: number; columns: number }, 
-  screenSize: { width: number; height: number }, 
+  rowsAndColumnsCount: { rows: number; columns: number },
+  screenSize: { width: number; height: number },
   numPieces: number
 ) => {
   const [canvasStyles, setCanvasStyles] = useState<CanvasStyle[]>([]);
@@ -177,6 +177,7 @@ export const useVideoCanvasRenderer = (
 
     const draw = () => {
       const video = videoRef.current;
+      console.log('running')
 
       if (!video || video.paused || video.ended) {
         isRunning = false;
@@ -260,9 +261,14 @@ export const useVideoCanvasRenderer = (
         video.removeEventListener('play', handleVideoPlay);
         video.removeEventListener('pause', handleVideoPause);
         video.removeEventListener('ended', handleVideoPause);
+
+        if (!video.paused && !video.ended && video.readyState >= 2) {
+          isRunning = true;
+          draw();
+        }
       }
     };
-  }, [isVideoLoaded, isMobile]);
+  }, [isVideoLoaded, isMobile, rowsAndColumnsCount]);
 
   return { videoRef, canvasRefs };
 };
