@@ -177,7 +177,6 @@ export const useVideoCanvasRenderer = (
 
     const draw = () => {
       const video = videoRef.current;
-      console.log('running')
 
       if (!video || video.paused || video.ended) {
         isRunning = false;
