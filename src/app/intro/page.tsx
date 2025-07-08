@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react";
 import NavigationMenu from "@/app/components/NavigationMenu";
-import Dots from "@/app/components/Dots";
 
 export default function IntroSection() {
   useEffect(() => {
@@ -33,7 +32,7 @@ export default function IntroSection() {
           Mein Name ist Marco Huwig, ich lebe in Saarbrücken und bin ausgebildeter Webentwickler.
         </p>
         <p className="text-lg mb-6 fade-in">
-          In den letzten vier Jahren habe ich als Full-Stack-Entwickler bei Neocosmo eine Vielzahl an Webprojekten erfolgreich
+          In den letzten vier Jahren habe ich als Fullstack-Entwickler bei Neocosmo eine Vielzahl an Webprojekten erfolgreich
           realisiert. Dazu zählt die Entwicklung von Frontend Komponenten, das Entwickeln und Integrieren von REST APIs,
           sowie Wartung und Support für bestehende Funktionalitäten.
         </p>
