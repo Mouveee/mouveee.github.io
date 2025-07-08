@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import NavigationMenu from "@/app/components/NavigationMenu";
-import Dots from "@/app/components/Dots";
 
 interface Category {
     name: string;
@@ -117,7 +116,7 @@ export default function Skills() {
                 }
             `}</style>
 
-            <Dots numberOfDots={20} />
+            
             <NavigationMenu />
         </div>
     );
