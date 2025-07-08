@@ -15,6 +15,7 @@ interface Skill {
     description: string;
     icon: string;
     category_id: number;
+    key: string;
 }
 
 
@@ -52,14 +53,14 @@ export default function Skills() {
             )}
 
             <div className="mt-12 space-y-8 w-full max-w-4xl z-50 text-center">
-                {categories && categories.map((category, index) => (
+                {categories && categories.map((category) => (
                     <div
-                        key={index}
+                        key={category.id}
                     >
                         <h2 className="text-2xl font-bold mb-4 z-50">{category.name}</h2>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                            {skills?.filter(skill => skill.category_id === category.id).map((skill, index) => (
-                                <div key={index} className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">
+                            {skills?.filter(skill => skill.category_id === category.id).map((skill) => (
+                                <div key={skill.key} className="tile w-full p-4 border-l-4 border-pink-500 bg-[#0d0d0d] rounded-lg shadow-lg transition-transform duration-300 flex flex-col items-center">
                                     <div className="tile-inner relative w-full h-full transform-style-preserve-3d text- bg-[#0d0d0d]">
                                         <div className="tile-front bg-gray-800 text-white p-4 rounded-lg shadow-lg flex items-center justify-center h-full flex-col">
                                             <div className="flex justify-center items-center w-full h-24 sm:h-32">
