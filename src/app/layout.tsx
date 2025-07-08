@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import Dots from "./components/Dots"
 import "./globals.css";
 
 const roboto = Roboto({
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body
         className={`${roboto.className} ${roboto.className} antialiased`}
       >
+        <Dots numberOfDots={20} />
         {children}
       </body>
     </html>
