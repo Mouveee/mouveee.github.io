@@ -123,11 +123,11 @@ export default function AdminClient() {
             >
                 {
                     categories?.map((category, index) => (
-                        <div key={index} className="mb-4">
+                        <div key={category.id} className="mb-4">
                             <h2 className="mb-4 font-semibold">Category:</h2>
 
                             <input
-                                key={index}
+                                key={category.id + "_input"}
                                 className="mb-4"
                                 type="text"
                                 name={category.name}
@@ -145,7 +145,7 @@ export default function AdminClient() {
                             <div className="m4 flex flex-row w-full flex-wrap gap-4">
                                 {
                                     skills?.filter(skill => skill.category_id === category.id).map((skill, skillIndex) => (
-                                        <div key={skillIndex} className="mb-6 flex flex-col w-full">
+                                        <div key={skill.id} className="mb-6 flex flex-col w-full">
                                             <input
                                                 type="text"
                                                 className="mb-4"
