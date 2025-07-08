@@ -49,7 +49,7 @@ export default function IntroSection() {
         </p>
       </div>
 
-      <Dots numberOfDots={20} />
+      
       <NavigationMenu />
     </div>
   );
