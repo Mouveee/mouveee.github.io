@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import NavigationMenu from '@/app/components/NavigationMenu';
-import Dots from '@/app/components/Dots';
 import Link from 'next/link';
 
 export default function Contact() {
@@ -51,7 +50,7 @@ export default function Contact() {
           animation: bgMove 10s infinite alternate ease-in-out;
         }
       `}</style>
-      <Dots numberOfDots={20} />
+      
       <NavigationMenu />
     </div>
   );
