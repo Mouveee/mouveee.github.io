@@ -1,7 +1,6 @@
 'use client';
 
 import NavigationMenu from './components/NavigationMenu';
-import Dots from './components/Dots';
 import {
   useScreenDimensions,
   useGridConfig,
@@ -10,6 +9,7 @@ import {
   useVideoCanvasRenderer,
   useCanvasStyler
 } from './CustomHooks/home';
+
 
 export default function Home() {
   const { screenSize, isMobile } = useScreenDimensions();
@@ -22,8 +22,6 @@ export default function Home() {
   return (
     <div
       className={`relative m-auto homescreen min-h-screen h-[100vh] w-[100vw] overflow-y-clip flex justify-center bg-black bg-gradient-to-r from-black via-[#4c09325c] to-black animate-bgMove z-0 `}>
-
-      <Dots numberOfDots={13} />
 
       <div
         className={`relative flex flex-col md:flex-row overflow-y-clip w-[100vw] h-[100vh] justify-evenly bg-black bg-opacity-5`}
