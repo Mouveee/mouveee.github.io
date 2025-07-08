@@ -6,6 +6,7 @@ import Dots from '@/app/components/Dots';
 const interests = [
   {
     category: "Filme & Serien",
+    id: 0,
     items: [
       "Twin Peaks",
       "Studio Ghibli",
@@ -14,6 +15,7 @@ const interests = [
   },
   {
     category: "Literatur",
+    id: 1,
     items: [
       "Haruki Murakami",
       "Cormac McCarthy",
@@ -22,6 +24,7 @@ const interests = [
   },
   {
     category: "Musik",
+    id: 2,
     items: [
       "Radiohead",
       "Flying Lotus",
@@ -30,6 +33,7 @@ const interests = [
   },
   {
     category: "Sonstiges",
+    id: 3,
     items: [
       "Ableton Live, Gitarren - Ich mache gerne Sounds und Musik",
       "Die Zelda Reihe",
@@ -48,7 +52,7 @@ export default function About() {
         <div className="divide-y divide-gray-900">
           {interests.map((interest, index) => (
             <div
-              key={index}
+              key={interest.id + "intID"}
               className="py-6 px-4 hover:bg-gray-800 transition-all duration-300 rounded-md"
               onMouseEnter={() => setHoveredCategory(index)}
               onMouseLeave={() => setHoveredCategory(-1)}
@@ -57,9 +61,9 @@ export default function About() {
                 {interest.category}
               </h2>
               <ul className="space-y-2 text-gray-300">
-                {interest.items.map((item, i) => (
+                {interest.items.map((item) => (
                   <li
-                    key={i}
+                    key={interest.id + "itemID"}
                     className={`text-lg transition-all duration-300 ${hoveredCategory === index ? 'text-pink-400 font-medium' : ''}`}
                   >
                     {item}
