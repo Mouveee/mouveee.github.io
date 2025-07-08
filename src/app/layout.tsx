@@ -24,7 +24,7 @@ export default function RootLayout({
       <body
         className={`${roboto.className} ${roboto.className} antialiased`}
       >
-        <Dots numberOfDots={20} />
+        <Dots numberOfDots={13} />
         {children}
       </body>
     </html>
