@@ -1,46 +1,46 @@
 'use client';
 import React, { useState } from 'react';
 import NavigationMenu from '@/app/components/NavigationMenu';
-import Dots from '@/app/components/Dots';
 
 const interests = [
   {
     category: "Filme & Serien",
     id: 0,
     items: [
-      "Twin Peaks",
-      "Studio Ghibli",
-      "Eternal Sunshine of the spotless Mind"
+      { id: 0, name: "Twin Peaks" },
+      { id: 1, name: "Studio Ghibli" },
+      { id: 2, name: "Eternal Sunshine of the spotless Mind" }
     ]
   },
   {
     category: "Literatur",
     id: 1,
     items: [
-      "Haruki Murakami",
-      "Cormac McCarthy",
-      "Raymond Chandler",
+      { id: 0, name: "Haruki Murakami" },
+      { id: 1, name: "Cormac McCarthy" },
+      { id: 2, name: "Raymond Chandler" }
     ]
   },
   {
     category: "Musik",
     id: 2,
     items: [
-      "Radiohead",
-      "Flying Lotus",
-      "JPEGMafia"
+      { id: 0, name: "Radiohead" },
+      { id: 1, name: "Flying Lotus" },
+      { id: 2, name: "JPEGMafia" }
     ]
   },
   {
     category: "Sonstiges",
     id: 3,
     items: [
-      "Ableton Live, Gitarren - Ich mache gerne Sounds und Musik",
-      "Die Zelda Reihe",
-      "Junji Ito"
+      { id: 0, name: "Ableton Live, Gitarren - Ich mache gerne Sounds und Musik" },
+      { id: 1, name: "Die Zelda Reihe" },
+      { id: 2, name: "Junji Ito" }
     ]
-  },
+  }
 ];
+
 
 export default function About() {
   const [hoveredCategory, setHoveredCategory] = useState<number>(-1);
@@ -63,10 +63,10 @@ export default function About() {
               <ul className="space-y-2 text-gray-300">
                 {interest.items.map((item) => (
                   <li
-                    key={interest.id + "itemID"}
+                    key={interest.id + "-" + item.id}
                     className={`text-lg transition-all duration-300 ${hoveredCategory === index ? 'text-pink-400 font-medium' : ''}`}
                   >
-                    {item}
+                    {item.name}
                   </li>
                 ))}
               </ul>
@@ -85,7 +85,7 @@ export default function About() {
           animation: bgMove 10s infinite alternate ease-in-out;
         }
       `}</style>
-      <Dots numberOfDots={20} />
+      
       <NavigationMenu />
     </div>
   );
