@@ -72,7 +72,7 @@ export default function Skills() {
                                                 {skill.label}
                                             </div>
                                         </div>
-                                        <div className="tile-back absolute tile-back inset-0 bg-[#222] text-xs font-semibold transform rotateY-18 0bg-gray-700 text-white p-4 rounded-lg shadow-lg flex items-center justify-center h-full space-y-2">
+                                        <div className="tile-back absolute tile-back inset-0 bg-[#222] text-s font-semibold transform rotateY-18 0bg-gray-700 text-white p-4 rounded-lg shadow-lg flex items-center justify-center h-full space-y-2">
                                             {skill.description}
                                         </div>
                                     </div>
