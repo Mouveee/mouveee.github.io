@@ -11,6 +11,7 @@ interface Dot {
   speed: number;
   spinSpeed: number;
   spinDirection: number;
+  filter: string;
 }
 
 export default function Dots( { numberOfDots }: { numberOfDots: number }) {
@@ -27,6 +28,7 @@ export default function Dots( { numberOfDots }: { numberOfDots: number }) {
       speed: Math.random() * 0.12,
       spinSpeed: Math.random() * 5 + 8,
       spinDirection: Math.random() > 0.5 ? 1 : -1,
+      filter: "blur(40px)"
     }));
     setDots(generatedDots);
 
@@ -54,6 +56,7 @@ export default function Dots( { numberOfDots }: { numberOfDots: number }) {
             animationDirection: dot.spinDirection === 1 ? 'normal' : 'reverse',
             animationDelay: dot.delay,
             transform: `translateY(${scrollPosition * dot.speed}px)`,
+            filter: "blur(1px)",
           }}
         >
         </div>
