@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 interface Dot {
   top: string;
@@ -10,63 +10,79 @@ interface Dot {
   delay: string;
   speed: number;
   spinSpeed: number;
-  spinDirection: number;
-  filter: string;
+  spinDirection: 'normal' | 'reverse';
 }
 
-export default function Dots( { numberOfDots }: { numberOfDots: number }) {
-  const [dots, setDots] = useState<Dot[]>([]);
-  const [scrollPosition, setScrollPosition] = useState(0);
+function createDot(): Dot {
+  return {
+    top: `${Math.random() * 100}vh`,
+    left: `${Math.random() * 100}vw`,
+    size: `${Math.random() * 100 + 100}px`,
+    opacity: Math.random() * 0.08 + 0.2,
+    delay: `${Math.random() * 2}s`,
+    speed: Math.random() * 0.12,
+    spinSpeed: Math.random() * 5 + 8,
+    spinDirection: Math.random() > 0.5 ? 'normal' : 'reverse',
+  };
+}
+
+export default function Dots({ numberOfDots }: { numberOfDots: number }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const dots = useMemo(
+    () => Array.from({ length: numberOfDots }, createDot),
+    [numberOfDots]
+  );
 
   useEffect(() => {
-    const generatedDots = Array.from({ length: numberOfDots }).map(() => ({
-      top: `${Math.random() * 100}vh`,
-      left: `${Math.random() * 100}vw`,
-      size: `${Math.random() * 100 + 100}px`,
-      opacity: Math.random() * 0.08 + 0.2,
-      delay: `${Math.random() * 2}s`,
-      speed: Math.random() * 0.12,
-      spinSpeed: Math.random() * 5 + 8,
-      spinDirection: Math.random() > 0.5 ? 1 : -1,
-      filter: "blur(40px)"
-    }));
-    setDots(generatedDots);
-
     const handleScroll = () => {
-      setScrollPosition(window.scrollY);
+      if (!containerRef.current) return;
+      containerRef.current.style.setProperty(
+        '--scrollY',
+        `${window.scrollY}px`
+      );
     };
 
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [numberOfDots]);
+  }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden -z-50">
+    <div
+      ref={containerRef}
+      className="fixed inset-0 pointer-events-none overflow-hidden -z-50"
+      style={{ '--scrollY': '0px' } as React.CSSProperties}
+    >
       {dots.map((dot, index) => (
         <div
           key={index}
-          className="fixed inset-0 bg-pink-400 opacity-30 rounded-full"
+          className="absolute rounded-full bg-pink-400"
           style={{
             top: dot.top,
             left: dot.left,
             width: dot.size,
             height: dot.size,
             opacity: dot.opacity,
-            animation: `rotateY ${dot.spinSpeed}s linear infinite`,
-            animationDirection: dot.spinDirection === 1 ? 'normal' : 'reverse',
+            filter: 'blur(1px)',
+            animation: `spin ${dot.spinSpeed}s linear infinite`,
+            animationDirection: dot.spinDirection,
             animationDelay: dot.delay,
-            transform: `translateY(${scrollPosition * dot.speed}px)`,
-            filter: "blur(1px)",
+            transform: `translateY(calc(var(--scrollY) * ${dot.speed}))`,
           }}
-        >
-        </div>
+        />
       ))}
+
       <style jsx>{`
-        @keyframes rotateY {
-          0% { transform: rotateY(0deg); }
-          100% { transform: rotateY(360deg); }
+        @keyframes spin {
+          from {
+            rotate: 0deg;
+          }
+          to {
+            rotate: 360deg;
+          }
         }
       `}</style>
     </div>
   );
-};
+}
